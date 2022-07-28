@@ -13,10 +13,10 @@ tile_data = PoolIntArray( 196628, 0, 0, 196629, 1, 0, 196630, 1, 0, 196631, 1, 0
 position = Vector2( 176, 32 )
 
 [node name="KinematicBody2D" parent="." instance=ExtResource( 2 )]
-position = Vector2( 176, 104 )
+position = Vector2( 176, 112 )
 
 [node name="KinematicBody2D2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 224, 152 )
+position = Vector2( 248, 152 )
 
 [node name="KinematicBody2D3" parent="." instance=ExtResource( 2 )]
-position = Vector2( 256, 120 )
+position = Vector2( 224, 112 )

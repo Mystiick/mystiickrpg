@@ -3,6 +3,8 @@ using System;
 
 public class Player : KinematicBody2D
 {
+    [Signal] public delegate void PlayerMoved();
+    [Signal] public delegate void PlayerDied();
     [Export] public int TileScale = 8;
 
     public int MaxHealth { get; private set; }
@@ -43,7 +45,7 @@ public class Player : KinematicBody2D
 
         direction *= TileScale;
 
-
+        // If any input has been detected, try to move or attack
         if (direction.Length() != 0)
         {
             var collision = MoveAndCollide(direction, testOnly: true);
@@ -51,26 +53,35 @@ public class Player : KinematicBody2D
             if (collision?.Collider is Enemy enemy)
             {
                 // We collided with an enemy, now we must fight
-                GD.Print("Collided with enemy");
                 Fight(enemy);
+                EmitSignal(nameof(PlayerMoved));
             }
             else if (collision == null)
             {
                 // No collision, move as normal
-                MoveAndCollide(direction);
+                // TODO: Move to common function 
+                {
+                    // No collision, move as normal
+                    MoveAndCollide(direction);
 
-                Position = new Vector2(
-                    Mathf.RoundToInt(Position.x),
-                    Mathf.RoundToInt(Position.y)
-                );
+                    // Sometimes the positions get off by ~.001 which breaks the pathing
+                    // So if we divide the position by the tile size   (8.0001 = 1.000125), then round it (1.000125 = 1) and multiply it back (1 = 8)
+                    // Then we can place the entity back on their tile
+                    var newPos = Position / (float)TileScale;
+                    Position = new Vector2(
+                        Mathf.RoundToInt(newPos.x),
+                        Mathf.RoundToInt(newPos.y)
+                    ) * TileScale;
+                }
+
+                EmitSignal(nameof(PlayerMoved));
             }
         }
     }
 
-    public void Fight(Enemy enemy)
+    internal void Fight(Enemy enemy)
     {
         enemy.Damage(this.Attack);
-        enemy.Fight(this);
     }
 
     public void Damage(int amount)
@@ -80,8 +91,8 @@ public class Player : KinematicBody2D
 
         if (Health <= 0)
         {
+            EmitSignal(nameof(PlayerDied));
             QueueFree();
         }
     }
-
 }
