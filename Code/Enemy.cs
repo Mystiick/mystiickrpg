@@ -11,9 +11,12 @@ public class Enemy : KinematicBody2D
     public int Range { get; private set; }
 
     private bool CanSeePlayer;
+    private Player player;
 
     public override void _Ready()
     {
+        player = GetTree().Root.GetNode<Player>("Main/Player");
+
         switch (Type)
         {
             case EnemyType.Crab:
@@ -37,19 +40,24 @@ public class Enemy : KinematicBody2D
             default: break;
         }
     }
+
+    /// <summary>
+    /// Runs every frame, sets a bool indicating if the current entity can see the player entity
+    /// </summary>
     public override void _PhysicsProcess(float delta)
     {
         Physics2DDirectSpaceState spaceState = GetWorld2d().DirectSpaceState;
-        Player player = GetTree().Root.GetNode<Player>("Main/Player");
 
         var result = spaceState.IntersectRay(this.Position + Vector2.One, player.Position + Vector2.One, new Godot.Collections.Array { this });
-
         if (result != null && result.Keys.Cast<string>().Contains("collider"))
         {
             CanSeePlayer = result["collider"] is Player;
         }
     }
 
+    /// <summary>
+    /// Damages the enemy. If the enemy dies it is removed from the scene TODO: and drops are calculated if any exist.
+    /// </summary>
     public void Damage(int amount)
     {
         Health -= amount;
@@ -59,7 +67,10 @@ public class Enemy : KinematicBody2D
         }
     }
 
-    public void Fight(Player player)
+    /// <summary>
+    /// Causes the enemy to attack the player TODO: and play the assiociated action
+    /// </summary>
+    public void Fight()
     {
         if (Health > 0)
         {
@@ -67,30 +78,34 @@ public class Enemy : KinematicBody2D
         }
     }
 
+    /// <summary>
+    /// Moves the enemy, and attacks them if they are within range
+    /// </summary>
     public void TakeTurn()
     {
         if (Health > 0)
         {
-            Player player = GetTree().Root.GetNode<Player>("Main/Player");
-            Vector2 directionToPlayer = GetDirectionToPlayer(player);
+            Vector2 directionToPlayer = GetDirectionToPlayer();
 
             // If the enemy can see the player, move toward them or attack them if they're in range
             if (CanSeePlayer)
             {
-                if (PlayerIsInRange(player))
+                if (PlayerIsInRange())
                 {
                     player.Damage(Attack);
                 }
                 else
                 {
-                    MoveTowardPlayer(player, directionToPlayer);
+                    MoveTowardPosition(directionToPlayer);
                 }
             }
         }
     }
 
-    // Check if the player is within range to be attacked
-    private bool PlayerIsInRange(Player player)
+    /// <summary>
+    /// Checks if the player is within range vertically or horizontally, but not diagonally 
+    /// </summary>
+    private bool PlayerIsInRange()
     {
         Vector2 offset = player.Position - this.Position;
 
@@ -108,12 +123,12 @@ public class Enemy : KinematicBody2D
         }
     }
 
-    // Moves the enemy toward the player 1 tile
-    private void MoveTowardPlayer(Player player, Vector2 direction)
+    /// <summary>
+    /// Moves the enemy toward the player 1 tile
+    /// </summary>
+    private void MoveTowardPosition(Vector2 direction)
     {
-        var collision = MoveAndCollide(direction, testOnly: true);
-
-        if (collision == null)
+        if (MoveAndCollide(direction, testOnly: true) == null)
         {
             // TODO: Move to common function 
             {
@@ -132,7 +147,7 @@ public class Enemy : KinematicBody2D
         }
     }
 
-    private Vector2 GetDirectionToPlayer(Player player)
+    private Vector2 GetDirectionToPlayer()
     {
         // Determine cardinal direction player is, in relation to the enemy
         Vector2 offset = this.Position - player.Position;

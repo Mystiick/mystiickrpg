@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://dungeon_tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Nodes/Enemies/Zombie.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Nodes/Pickups/Key.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Nodes/Pickups/Chicken.tscn" type="PackedScene" id=4]
 
 [node name="TileMap" type="TileMap"]
 tile_set = ExtResource( 1 )
@@ -12,11 +14,21 @@ tile_data = PoolIntArray( 196628, 0, 0, 196629, 1, 0, 196630, 1, 0, 196631, 1, 0
 [node name="PlayerSpawn" type="Position2D" parent="."]
 position = Vector2( 176, 32 )
 
-[node name="KinematicBody2D" parent="." instance=ExtResource( 2 )]
-position = Vector2( 176, 112 )
+[node name="Pickups" type="Node" parent="."]
 
-[node name="KinematicBody2D2" parent="." instance=ExtResource( 2 )]
+[node name="Key" parent="Pickups" instance=ExtResource( 3 )]
+position = Vector2( 144, 88 )
+
+[node name="Area2D" parent="Pickups" instance=ExtResource( 4 )]
+position = Vector2( 264, 128 )
+
+[node name="Enemies" type="Node" parent="."]
+
+[node name="Zombie" parent="Enemies" instance=ExtResource( 2 )]
+position = Vector2( 176, 120 )
+
+[node name="Zombie2" parent="Enemies" instance=ExtResource( 2 )]
 position = Vector2( 248, 152 )
 
-[node name="KinematicBody2D3" parent="." instance=ExtResource( 2 )]
+[node name="Zombie3" parent="Enemies" instance=ExtResource( 2 )]
 position = Vector2( 224, 112 )

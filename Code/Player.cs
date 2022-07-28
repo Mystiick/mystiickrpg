@@ -11,6 +11,7 @@ public class Player : KinematicBody2D
     public int Health { get; private set; }
     public int Shield { get; private set; }
     public int Attack { get; private set; }
+    public int Keys { get; set; }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -19,6 +20,7 @@ public class Player : KinematicBody2D
         Health = 6;
         Shield = 0;
         Attack = 1;
+        Keys = 0;
 
         GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
     }
@@ -29,7 +31,34 @@ public class Player : KinematicBody2D
         HandleInput();
     }
 
-    internal void HandleInput()
+    public void Fight(Enemy enemy)
+    {
+        enemy.Damage(this.Attack);
+    }
+
+    public void Damage(int amount)
+    {
+        Health -= amount;
+        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
+
+        if (Health <= 0)
+        {
+            EmitSignal(nameof(PlayerDied));
+            QueueFree();
+        }
+    }
+
+    /// <summary>
+    /// Heals the player for the specified amount, up to the max health
+    /// </summary>
+    public void Heal(int amount)
+    {
+        Health = Mathf.Clamp(0, MaxHealth, Health + amount);
+
+        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
+    }
+
+    private void HandleInput()
     {
         Vector2 direction = Vector2.Zero;
         // Use elses here instead of checking each one individually to make sure only one direction is moved at a time
@@ -79,20 +108,4 @@ public class Player : KinematicBody2D
         }
     }
 
-    internal void Fight(Enemy enemy)
-    {
-        enemy.Damage(this.Attack);
-    }
-
-    public void Damage(int amount)
-    {
-        Health -= amount;
-        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
-
-        if (Health <= 0)
-        {
-            EmitSignal(nameof(PlayerDied));
-            QueueFree();
-        }
-    }
 }
