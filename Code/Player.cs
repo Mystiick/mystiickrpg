@@ -16,7 +16,7 @@ public class Player : KinematicBody2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        MaxHealth = 6;
+        MaxHealth = 10;
         Health = 6;
         Shield = 0;
         Attack = 1;
@@ -53,7 +53,7 @@ public class Player : KinematicBody2D
     /// </summary>
     public void Heal(int amount)
     {
-        Health = Mathf.Clamp(0, MaxHealth, Health + amount);
+        Health = Mathf.Clamp(Health + amount, 0, MaxHealth);
 
         GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
     }
@@ -79,13 +79,7 @@ public class Player : KinematicBody2D
         {
             var collision = MoveAndCollide(direction, testOnly: true);
 
-            if (collision?.Collider is Enemy enemy)
-            {
-                // We collided with an enemy, now we must fight
-                Fight(enemy);
-                EmitSignal(nameof(PlayerMoved));
-            }
-            else if (collision == null)
+            if (collision == null)
             {
                 // No collision, move as normal
                 // TODO: Move to common function 
@@ -105,7 +99,39 @@ public class Player : KinematicBody2D
 
                 EmitSignal(nameof(PlayerMoved));
             }
+            else
+            {
+                HandlePlayerCollision(collision);
+            }
+        }
+        else if (Input.IsActionJustPressed("skip_turn"))
+        {
+            EmitSignal(nameof(PlayerMoved));
         }
     }
 
+    private void HandlePlayerCollision(KinematicCollision2D collision)
+    {
+        if (collision.Collider is Enemy enemy)
+        {
+            // We collided with an enemy, now we must fight
+            Fight(enemy);
+            EmitSignal(nameof(PlayerMoved));
+        }
+        else if (collision.Collider is Door door)
+        {
+            if (door.State == Door.DoorState.Locked && Keys > 0)
+            {
+                door.Unlock();
+                Keys--;
+                GetParent().GetNode<HUD>("HUD").UpdateKeys(Keys);
+                EmitSignal(nameof(PlayerMoved));
+            }
+            else if (door.State == Door.DoorState.Closed)
+            {
+                door.Open();
+                EmitSignal(nameof(PlayerMoved));
+            }
+        }
+    }
 }

@@ -3,13 +3,25 @@ using System.Linq;
 
 public class Main : Node
 {
+    private Node _loadedScene;
+    private string _worldPrefix;
+
     /// <summary>
     /// Called when the node enters the scene tree for the first time.
     /// </summary>
     public override void _Ready()
     {
         //OS.WindowMaximized = true;
-        LoadMap("StarterDungeon");
+        _worldPrefix = "StarterDungeon/";
+        LoadMap("Level1");
+    }
+
+    public override void _Process(float delta)
+    {
+        if (Input.IsActionJustPressed("debug"))
+        {
+            GetNode<DebugUI>("DebugUI").ShowLevelSelect();
+        }
     }
 
     /// <summary>
@@ -17,13 +29,25 @@ public class Main : Node
     /// </summary>
     private void LoadMap(string map)
     {
-        Node scene = ResourceLoader.Load<PackedScene>($"res://Maps/{map}.tscn").Instance();
+        if (_loadedScene != null)
+            _loadedScene.QueueFree();
+
+        Node scene = ResourceLoader.Load<PackedScene>($"res://Maps/{_worldPrefix}{map}.tscn").Instance();
         Player player = this.GetNode<Player>("Player");
         Position2D playerSpawn = scene.GetNode<Position2D>("PlayerSpawn");
 
-        this.AddChild(scene);
-        this.MoveChild(scene, 1);
+        _loadedScene = scene;
+        _loadedScene.Connect(nameof(Level.OnLevelLoaded), this, "OnLevelLoaded");
 
+        this.CallDeferred("add_child", scene);
+    }
+
+    private void OnLevelLoaded(Level sender)
+    {
+        this.MoveChild(sender, 1);
+
+        Player player = GetNode<Player>("Player");
+        Position2D playerSpawn = sender.GetNode<Position2D>("PlayerSpawn");
         player.Position = playerSpawn.Position;
 
         Godot.Collections.Array pickups = GetTree().GetNodesInGroup("pickups");
@@ -31,8 +55,12 @@ public class Main : Node
         {
             p.Connect(nameof(Pickup.ItemPickedUp), this, nameof(OnItemPickedUp));
         }
+        Godot.Collections.Array stairs = GetTree().GetNodesInGroup("stairs");
+        foreach (Stairs s in stairs)
+        {
+            s.Connect(nameof(Stairs.StairsEntered), this, nameof(OnStairsEntered));
+        }
     }
-
 
     /// <summary>
     /// Handles the event after the player has moved. Updates enemies and allows them to move/attack.
@@ -52,13 +80,27 @@ public class Main : Node
     /// </summary>
     private void OnItemPickedUp(Pickup item)
     {
+        HUD hud = GetNode<HUD>("/root/Main/HUD");
+        Player player = GetNode<Player>("/root/Main/Player");
+
         if (item is Key)
         {
-            GetNode<HUD>("HUD").UpdateKeys(GetNode<Player>("Player").Keys);
+            hud.UpdateKeys(player.Keys);
         }
         else if (item is Chicken)
         {
 
         }
+    }
+
+    private void OnDebugLoadLevelPressed(string level)
+    {
+        LoadMap(level);
+    }
+
+
+    private void OnStairsEntered(Stairs stairs)
+    {
+        LoadMap(stairs.Destination);
     }
 }

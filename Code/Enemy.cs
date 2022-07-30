@@ -20,8 +20,8 @@ public class Enemy : KinematicBody2D
         switch (Type)
         {
             case EnemyType.Crab:
-                Health = 10;
-                Attack = 0;
+                Health = 15;
+                Attack = 2;
                 Range = 1;
                 break;
 
@@ -32,7 +32,7 @@ public class Enemy : KinematicBody2D
                 break;
 
             case EnemyType.Skeleton:
-                Health = 4;
+                Health = 3;
                 Attack = 2;
                 Range = 1;
                 break;

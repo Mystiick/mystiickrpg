@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Nodes/UI/Theme.tres" type="Theme" id=1]
+[ext_resource path="res://Code/DebugUI.cs" type="Script" id=2]
+
+[node name="DebugUI" type="CanvasLayer"]
+script = ExtResource( 2 )
+
+[node name="LoadLevel" type="PopupDialog" parent="."]
+margin_right = 256.0
+margin_bottom = 96.0
+
+[node name="Level" type="LineEdit" parent="LoadLevel"]
+margin_left = 8.0
+margin_top = 32.0
+margin_right = 248.0
+margin_bottom = 54.0
+theme = ExtResource( 1 )
+placeholder_text = "StarterDungeon/Level2"
+
+[node name="Accept" type="Button" parent="LoadLevel"]
+margin_left = 144.0
+margin_top = 64.0
+margin_right = 191.0
+margin_bottom = 84.0
+theme = ExtResource( 1 )
+text = "Load"
+
+[node name="Cancel" type="Button" parent="LoadLevel"]
+margin_left = 200.0
+margin_top = 64.0
+margin_right = 247.0
+margin_bottom = 84.0
+theme = ExtResource( 1 )
+text = "Cancel"
+
+[node name="Label" type="Label" parent="LoadLevel"]
+margin_left = 104.0
+margin_top = 16.0
+margin_right = 159.0
+margin_bottom = 30.0
+theme = ExtResource( 1 )
+text = "Load level:"
+
+[connection signal="pressed" from="LoadLevel/Accept" to="." method="OnLoadLevelAcceptPressed"]
+[connection signal="pressed" from="LoadLevel/Cancel" to="." method="OnLoadLevelCancelPressed"]
