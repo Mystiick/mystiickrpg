@@ -16,7 +16,7 @@ margin_top = 32.0
 margin_right = 248.0
 margin_bottom = 54.0
 theme = ExtResource( 1 )
-placeholder_text = "StarterDungeon/Level2"
+placeholder_text = "Level2"
 
 [node name="Accept" type="Button" parent="LoadLevel"]
 margin_left = 144.0

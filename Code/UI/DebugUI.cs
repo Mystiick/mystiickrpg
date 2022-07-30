@@ -4,7 +4,7 @@ using System;
 public class DebugUI : CanvasLayer
 {
 
-    [Signal] public delegate void OnLoadLevelPressed(string level);
+    [Signal] public delegate void LoadLevelPressed(string level);
 
     public override void _Ready()
     {
@@ -19,7 +19,7 @@ public class DebugUI : CanvasLayer
     private void OnLoadLevelAcceptPressed()
     {
         GetNode<PopupDialog>("LoadLevel").Hide();
-        EmitSignal(nameof(OnLoadLevelPressed), GetNode<LineEdit>("LoadLevel/Level").Text);
+        EmitSignal(nameof(LoadLevelPressed), GetNode<LineEdit>("LoadLevel/Level").Text);
     }
     private void OnLoadLevelCancelPressed()
     {

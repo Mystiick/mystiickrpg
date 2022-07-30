@@ -28,7 +28,6 @@ public class Stairs : Area2D
     {
         if (collision is Player p)
         {
-            GD.Print("OnStairsBodyEntered");
             EmitSignal(nameof(StairsEntered), new[] { this });
         }
     }

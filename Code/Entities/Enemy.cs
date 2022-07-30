@@ -10,7 +10,7 @@ public class Enemy : KinematicBody2D
     public int Attack { get; private set; }
     public int Range { get; private set; }
 
-    private bool CanSeePlayer;
+    public bool CanSeePlayer;
     private Player player;
 
     public override void _Ready()

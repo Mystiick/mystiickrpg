@@ -1,14 +1,16 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Nodes/UI/Theme.tres" type="Theme" id=1]
-[ext_resource path="res://Code/UI/MainMenu.cs" type="Script" id=2]
+[ext_resource path="res://Code/UI/YouDied.cs" type="Script" id=2]
 [ext_resource path="res://Assets/Kenney Pixel.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 60
+size = 47
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 3 )
 
-[node name="MainMenu" type="CanvasLayer"]
+[node name="YouDied" type="CanvasLayer"]
 script = ExtResource( 2 )
 
 [node name="Control" type="Control" parent="."]
@@ -31,36 +33,36 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -27.0
+margin_left = -31.0
 margin_top = -37.0
-margin_right = 27.0
+margin_right = 31.0
 margin_bottom = 37.0
 
-[node name="Start" type="Button" parent="Control/Panel/GridContainer"]
-margin_right = 54.0
+[node name="Retry" type="Button" parent="Control/Panel/GridContainer"]
+margin_right = 62.0
 margin_bottom = 18.0
-text = "Start"
+text = "Retry"
 
 [node name="pad3" type="Control" parent="Control/Panel/GridContainer"]
 margin_top = 22.0
-margin_right = 54.0
+margin_right = 62.0
 margin_bottom = 22.0
 
-[node name="Settings" type="Button" parent="Control/Panel/GridContainer"]
+[node name="MainMenu" type="Button" parent="Control/Panel/GridContainer"]
 margin_top = 26.0
-margin_right = 54.0
+margin_right = 62.0
 margin_bottom = 44.0
 disabled = true
-text = "Settings"
+text = "Main Menu"
 
 [node name="pad2" type="Control" parent="Control/Panel/GridContainer"]
 margin_top = 48.0
-margin_right = 54.0
+margin_right = 62.0
 margin_bottom = 48.0
 
 [node name="Exit" type="Button" parent="Control/Panel/GridContainer"]
 margin_top = 52.0
-margin_right = 54.0
+margin_right = 62.0
 margin_bottom = 70.0
 text = "Exit"
 
@@ -73,9 +75,11 @@ margin_left = -103.0
 margin_top = -111.0
 margin_right = 103.0
 margin_bottom = -65.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
 custom_fonts/font = SubResource( 1 )
-text = "Game Name"
+text = "You Died"
 align = 1
 
-[connection signal="pressed" from="Control/Panel/GridContainer/Start" to="." method="OnStartPressed"]
+[connection signal="pressed" from="Control/Panel/GridContainer/Retry" to="." method="OnRetryPressed"]
+[connection signal="pressed" from="Control/Panel/GridContainer/MainMenu" to="." method="OnMainMenuPressed"]
 [connection signal="pressed" from="Control/Panel/GridContainer/Exit" to="." method="OnExitPressed"]

@@ -12,17 +12,12 @@ public class Player : KinematicBody2D
     public int Shield { get; private set; }
     public int Attack { get; private set; }
     public int Keys { get; set; }
+    public bool CanMove { get; set; }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        MaxHealth = 10;
-        Health = 6;
-        Shield = 0;
-        Attack = 1;
-        Keys = 0;
-
-        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
+        Reset();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -31,11 +26,17 @@ public class Player : KinematicBody2D
         HandleInput();
     }
 
+    /// <summary>
+    /// Causes the player to deal damage to the specified enemy
+    /// </summary>
     public void Fight(Enemy enemy)
     {
         enemy.Damage(this.Attack);
     }
 
+    /// <summary>
+    /// Damages the player for the specified amount
+    /// </summary>
     public void Damage(int amount)
     {
         Health -= amount;
@@ -44,7 +45,8 @@ public class Player : KinematicBody2D
         if (Health <= 0)
         {
             EmitSignal(nameof(PlayerDied));
-            QueueFree();
+            CanMove = false;
+            Hide();
         }
     }
 
@@ -58,56 +60,80 @@ public class Player : KinematicBody2D
         GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
     }
 
+    /// <summary>
+    /// Reserts the player's stats to a fresh copy
+    /// </summary>
+    public void Reset()
+    {
+        MaxHealth = 10;
+        Health = 10;
+        Shield = 0;
+        Attack = 1;
+        Keys = 0;
+        CanMove = true;
+
+        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
+    }
+
     private void HandleInput()
     {
-        Vector2 direction = Vector2.Zero;
-        // Use elses here instead of checking each one individually to make sure only one direction is moved at a time
-        // And 2 turns aren't taken by trying to move at an angle
-        if (Input.IsActionJustPressed("move_up"))
-            direction.y--;
-        else if (Input.IsActionJustPressed("move_down"))
-            direction.y++;
-        else if (Input.IsActionJustPressed("move_left"))
-            direction.x--;
-        else if (Input.IsActionJustPressed("move_right"))
-            direction.x++;
-
-        direction *= TileScale;
-
-        // If any input has been detected, try to move or attack
-        if (direction.Length() != 0)
+        if (CanMove)
         {
-            var collision = MoveAndCollide(direction, testOnly: true);
+            Vector2 direction = Vector2.Zero;
+            // Use elses here instead of checking each one individually to make sure only one direction is moved at a time
+            // And 2 turns aren't taken by trying to move at an angle
+            if (Input.IsActionPressed("move_up"))
+                direction.y--;
+            else if (Input.IsActionPressed("move_down"))
+                direction.y++;
+            else if (Input.IsActionPressed("move_left"))
+                direction.x--;
+            else if (Input.IsActionPressed("move_right"))
+                direction.x++;
 
-            if (collision == null)
+            direction *= TileScale;
+
+            // If any input has been detected, try to move or attack
+            if (direction.Length() != 0)
             {
-                // No collision, move as normal
-                // TODO: Move to common function 
+                var collision = MoveAndCollide(direction, testOnly: true);
+
+                if (collision == null)
                 {
                     // No collision, move as normal
-                    MoveAndCollide(direction);
+                    // TODO: Move to common function 
+                    {
+                        // No collision, move as normal
+                        MoveAndCollide(direction);
 
-                    // Sometimes the positions get off by ~.001 which breaks the pathing
-                    // So if we divide the position by the tile size   (8.0001 = 1.000125), then round it (1.000125 = 1) and multiply it back (1 = 8)
-                    // Then we can place the entity back on their tile
-                    var newPos = Position / (float)TileScale;
-                    Position = new Vector2(
-                        Mathf.RoundToInt(newPos.x),
-                        Mathf.RoundToInt(newPos.y)
-                    ) * TileScale;
+                        // Sometimes the positions get off by ~.001 which breaks the pathing
+                        // So if we divide the position by the tile size   (8.0001 = 1.000125), then round it (1.000125 = 1) and multiply it back (1 = 8)
+                        // Then we can place the entity back on their tile
+                        var newPos = Position / (float)TileScale;
+                        Position = new Vector2(
+                            Mathf.RoundToInt(newPos.x),
+                            Mathf.RoundToInt(newPos.y)
+                        ) * TileScale;
+                    }
+
+                    FinishTurn();
                 }
-
-                EmitSignal(nameof(PlayerMoved));
+                else
+                {
+                    HandlePlayerCollision(collision);
+                }
             }
-            else
+            else if (Input.IsActionJustPressed("skip_turn"))
             {
-                HandlePlayerCollision(collision);
+                FinishTurn();
             }
         }
-        else if (Input.IsActionJustPressed("skip_turn"))
-        {
-            EmitSignal(nameof(PlayerMoved));
-        }
+    }
+
+    private void FinishTurn()
+    {
+        CanMove = false;
+        EmitSignal(nameof(PlayerMoved));
     }
 
     private void HandlePlayerCollision(KinematicCollision2D collision)
@@ -116,7 +142,7 @@ public class Player : KinematicBody2D
         {
             // We collided with an enemy, now we must fight
             Fight(enemy);
-            EmitSignal(nameof(PlayerMoved));
+            FinishTurn();
         }
         else if (collision.Collider is Door door)
         {
@@ -125,12 +151,12 @@ public class Player : KinematicBody2D
                 door.Unlock();
                 Keys--;
                 GetParent().GetNode<HUD>("HUD").UpdateKeys(Keys);
-                EmitSignal(nameof(PlayerMoved));
+                FinishTurn();
             }
             else if (door.State == Door.DoorState.Closed)
             {
                 door.Open();
-                EmitSignal(nameof(PlayerMoved));
+                FinishTurn();
             }
         }
     }
