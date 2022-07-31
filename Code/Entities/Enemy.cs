@@ -4,41 +4,21 @@ using System.Linq;
 
 public class Enemy : KinematicBody2D
 {
+    [Signal] public delegate void EnemyKilled(Enemy me);
     [Export] EnemyType Type;
     [Export] public int TileScale = 8;
-    public int Health { get; private set; }
-    public int Attack { get; private set; }
-    public int Range { get; private set; }
+    [Export] public Texture[] Bloodstains;
 
-    public bool CanSeePlayer;
+    [Export] public int Health { get; private set; }
+    [Export] public int Attack { get; private set; }
+    [Export] public int Range { get; private set; }
+    public bool CanSeePlayer { get; private set; }
+
     private Player player;
 
     public override void _Ready()
     {
         player = GetTree().Root.GetNode<Player>("Main/Player");
-
-        switch (Type)
-        {
-            case EnemyType.Crab:
-                Health = 15;
-                Attack = 2;
-                Range = 1;
-                break;
-
-            case EnemyType.Zombie:
-                Health = 2;
-                Attack = 1;
-                Range = 1;
-                break;
-
-            case EnemyType.Skeleton:
-                Health = 3;
-                Attack = 2;
-                Range = 1;
-                break;
-
-            default: break;
-        }
     }
 
     /// <summary>
@@ -63,6 +43,7 @@ public class Enemy : KinematicBody2D
         Health -= amount;
         if (Health <= 0)
         {
+            EmitSignal(nameof(EnemyKilled), this);
             QueueFree();
         }
     }
@@ -83,7 +64,7 @@ public class Enemy : KinematicBody2D
     /// </summary>
     public void TakeTurn()
     {
-        if (Health > 0)
+        if (!IsQueuedForDeletion() && Health > 0)
         {
             Vector2 directionToPlayer = GetDirectionToPlayer();
 

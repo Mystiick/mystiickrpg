@@ -18,6 +18,43 @@ script = ExtResource( 2 )
 [node name="PlayerSpawn" type="Position2D" parent="."]
 position = Vector2( 96, 16 )
 
+[node name="DnS" type="Node" parent="."]
+
+[node name="Stairs" parent="DnS" instance=ExtResource( 1 )]
+position = Vector2( 224, 224 )
+Destination = "Level4"
+
+[node name="Door" parent="DnS" instance=ExtResource( 3 )]
+position = Vector2( 296, 104 )
+
+[node name="Door2" parent="DnS" instance=ExtResource( 3 )]
+position = Vector2( 296, 128 )
+
+[node name="Door3" parent="DnS" instance=ExtResource( 3 )]
+position = Vector2( 392, 128 )
+State = 2
+
+[node name="Door4" parent="DnS" instance=ExtResource( 3 )]
+position = Vector2( 160, 192 )
+
+[node name="Door5" parent="DnS" instance=ExtResource( 3 )]
+position = Vector2( 240, 200 )
+
+[node name="Door6" parent="DnS" instance=ExtResource( 3 )]
+position = Vector2( 352, 40 )
+
+[node name="Door7" parent="DnS" instance=ExtResource( 3 )]
+position = Vector2( 88, 56 )
+
+[node name="Door8" parent="DnS" instance=ExtResource( 3 )]
+position = Vector2( 160, 128 )
+
+[node name="Door9" parent="DnS" instance=ExtResource( 3 )]
+position = Vector2( 192, 104 )
+
+[node name="Door10" parent="DnS" instance=ExtResource( 3 )]
+position = Vector2( 192, 56 )
+
 [node name="Pickups" type="Node" parent="."]
 
 [node name="Chicken" parent="Pickups" instance=ExtResource( 7 )]
@@ -66,40 +103,3 @@ position = Vector2( 352, 176 )
 
 [node name="Zombie" parent="Enemies" instance=ExtResource( 4 )]
 position = Vector2( 120, 120 )
-
-[node name="DnS" type="Node" parent="."]
-
-[node name="Stairs" parent="DnS" instance=ExtResource( 1 )]
-position = Vector2( 224, 224 )
-Destination = "Level4"
-
-[node name="Door" parent="DnS" instance=ExtResource( 3 )]
-position = Vector2( 296, 104 )
-
-[node name="Door2" parent="DnS" instance=ExtResource( 3 )]
-position = Vector2( 296, 128 )
-
-[node name="Door3" parent="DnS" instance=ExtResource( 3 )]
-position = Vector2( 392, 128 )
-State = 2
-
-[node name="Door4" parent="DnS" instance=ExtResource( 3 )]
-position = Vector2( 160, 192 )
-
-[node name="Door5" parent="DnS" instance=ExtResource( 3 )]
-position = Vector2( 240, 200 )
-
-[node name="Door6" parent="DnS" instance=ExtResource( 3 )]
-position = Vector2( 352, 40 )
-
-[node name="Door7" parent="DnS" instance=ExtResource( 3 )]
-position = Vector2( 88, 56 )
-
-[node name="Door8" parent="DnS" instance=ExtResource( 3 )]
-position = Vector2( 160, 128 )
-
-[node name="Door9" parent="DnS" instance=ExtResource( 3 )]
-position = Vector2( 192, 104 )
-
-[node name="Door10" parent="DnS" instance=ExtResource( 3 )]
-position = Vector2( 192, 56 )

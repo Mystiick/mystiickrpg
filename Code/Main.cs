@@ -48,7 +48,9 @@ public class Main : Node
             if (_enemyMove.Elapsed)
             {
                 _enemyMove.Reset();
-                _enemyTurns.Dequeue().TakeTurn();
+                var e = _enemyTurns.Dequeue();
+                if (IsInstanceValid(e))
+                    e.TakeTurn();
             }
         }
         else
@@ -87,6 +89,7 @@ public class Main : Node
         List<Node> entities = new List<Node>();
         entities.AddRange(GetTree().GetNodesInGroup("pickups").Cast<Node>());
         entities.AddRange(GetTree().GetNodesInGroup("stairs").Cast<Node>());
+        entities.AddRange(GetTree().GetNodesInGroup("enemies").Cast<Node>());
 
         foreach (Node s in entities)
         {
@@ -123,6 +126,12 @@ public class Main : Node
         {
             if (!s.IsQueuedForDeletion())
                 s.Connect(nameof(Stairs.StairsEntered), this, nameof(OnStairsEntered));
+        }
+        Godot.Collections.Array enemies = GetTree().GetNodesInGroup("enemies");
+        foreach (Enemy e in enemies)
+        {
+            if (!e.IsQueuedForDeletion())
+                e.Connect(nameof(Enemy.EnemyKilled), this, nameof(OnEnemyKilled));
         }
     }
 
@@ -202,6 +211,14 @@ public class Main : Node
     private void OnStairsEntered(Stairs stairs)
     {
         LoadMap(stairs.Destination);
+    }
+
+    private void OnEnemyKilled(Enemy enemy)
+    {
+        var stain = new Sprite();
+        stain.Texture = enemy.Bloodstains[GD.Randi() % enemy.Bloodstains.Count()];
+        stain.Position = enemy.Position + new Vector2(4, 4);
+        _loadedScene.GetNode<Node>("DnS").AddChild(stain);
     }
 
     #endregion
