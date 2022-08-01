@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/background_air_vent_fan_loop_01.wav-3d26f689cb7012e812e70a721b7fa07e.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/background_air_vent_fan_loop_01.wav"
+dest_files=[ "res://.import/background_air_vent_fan_loop_01.wav-3d26f689cb7012e812e70a721b7fa07e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=true
+compress/mode=0

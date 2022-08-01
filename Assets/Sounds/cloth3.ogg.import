@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/cloth3.ogg-f3ff7877e20347406f42ffe3ede6d4f1.oggstr"
+
+[deps]
+
+source_file="res://Assets/Sounds/cloth3.ogg"
+dest_files=[ "res://.import/cloth3.ogg-f3ff7877e20347406f42ffe3ede6d4f1.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0
