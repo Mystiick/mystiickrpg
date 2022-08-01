@@ -1,9 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Code/Entities/Door.cs" type="Script" id=1]
 [ext_resource path="res://Assets/door_closed.png" type="Texture" id=2]
 [ext_resource path="res://Assets/door_locked.png" type="Texture" id=3]
 [ext_resource path="res://Assets/door_open.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Sounds/metalLatch.ogg" type="AudioStream" id=5]
+[ext_resource path="res://Assets/Sounds/doorOpen_2.ogg" type="AudioStream" id=6]
+[ext_resource path="res://Assets/Sounds/doorClose_1.ogg" type="AudioStream" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4, 4 )
@@ -13,6 +16,9 @@ script = ExtResource( 1 )
 Locked = ExtResource( 3 )
 Opened = ExtResource( 4 )
 Closed = ExtResource( 2 )
+UnlockSound = ExtResource( 5 )
+OpenSound = ExtResource( 6 )
+CloseSound = ExtResource( 7 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 4, 4 )

@@ -7,6 +7,10 @@ public class Door : KinematicBody2D
     [Export] public Texture Opened;
     [Export] public Texture Closed;
     [Export] public DoorState State = DoorState.Closed;
+    [Export] public AudioStream UnlockSound;
+    [Export] public AudioStream OpenSound;
+    [Export] public AudioStream CloseSound;
+
 
     public override void _Ready()
     {
@@ -17,19 +21,25 @@ public class Door : KinematicBody2D
     public void Open()
     {
         if (State != DoorState.Locked)
+        {
             UpdateState(DoorState.Open);
+            PlayAudio(OpenSound);
+        }
     }
     public void Unlock()
     {
         UpdateState(DoorState.Closed);
+        PlayAudio(UnlockSound);
     }
     public void Close()
     {
         UpdateState(DoorState.Closed);
+        PlayAudio(CloseSound);
     }
     public void Lock()
     {
         UpdateState(DoorState.Locked);
+        PlayAudio(UnlockSound);
     }
 
     private void UpdateState(DoorState state)
@@ -59,6 +69,13 @@ public class Door : KinematicBody2D
                 break;
 
         }
+    }
+
+    private void PlayAudio(AudioStream sound)
+    {
+        var audio = GetNode<AudioStreamPlayer>("/root/Main/Pickup");
+        audio.Stream = sound;
+        audio.Play();
     }
 
     public enum DoorState

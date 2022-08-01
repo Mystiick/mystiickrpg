@@ -1,8 +1,13 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Assets/skele.png" type="Texture" id=1]
 [ext_resource path="res://Code/Entities/Enemy.cs" type="Script" id=2]
 [ext_resource path="res://Assets/bones.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Sounds/impactPlate_medium_003.ogg" type="AudioStream" id=4]
+[ext_resource path="res://Assets/Sounds/impactPlate_medium_001.ogg" type="AudioStream" id=5]
+[ext_resource path="res://Assets/Sounds/impactPlate_medium_002.ogg" type="AudioStream" id=6]
+[ext_resource path="res://Assets/Sounds/impactPlate_medium_004.ogg" type="AudioStream" id=7]
+[ext_resource path="res://Assets/Sounds/impactPlate_medium_000.ogg" type="AudioStream" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 3 )
@@ -14,6 +19,7 @@ Attack = 2
 Range = 1
 Type = 2
 Bloodstains = [ ExtResource( 3 ) ]
+HitSounds = [ ExtResource( 8 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 4 ), ExtResource( 7 ) ]
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 4, 4 )

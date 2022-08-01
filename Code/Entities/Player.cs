@@ -6,6 +6,9 @@ public class Player : KinematicBody2D
     [Signal] public delegate void PlayerMoved();
     [Signal] public delegate void PlayerDied();
     [Export] public int TileScale = 8;
+    [Export] public AudioStream[] Footsteps;
+    [Export] public AudioStream DeathSound;
+
 
     public int MaxHealth { get; private set; }
     public int Health { get; private set; }
@@ -47,6 +50,7 @@ public class Player : KinematicBody2D
             EmitSignal(nameof(PlayerDied));
             CanMove = false;
             Hide();
+            PlaySound(DeathSound);
         }
     }
 
@@ -115,7 +119,7 @@ public class Player : KinematicBody2D
                             Mathf.RoundToInt(newPos.y)
                         ) * TileScale;
                     }
-
+                    PlaySound(Footsteps.Random());
                     FinishTurn();
                 }
                 else
@@ -159,5 +163,12 @@ public class Player : KinematicBody2D
                 FinishTurn();
             }
         }
+    }
+
+    private void PlaySound(AudioStream sound)
+    {
+        var audio = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
+        audio.Stream = sound;
+        audio.Play();
     }
 }

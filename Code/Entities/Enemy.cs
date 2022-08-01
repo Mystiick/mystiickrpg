@@ -8,7 +8,7 @@ public class Enemy : KinematicBody2D
     [Export] EnemyType Type;
     [Export] public int TileScale = 8;
     [Export] public Texture[] Bloodstains;
-
+    [Export] public AudioStream[] HitSounds;
     [Export] public int Health { get; private set; }
     [Export] public int Attack { get; private set; }
     [Export] public int Range { get; private set; }
@@ -41,21 +41,15 @@ public class Enemy : KinematicBody2D
     public void Damage(int amount)
     {
         Health -= amount;
+
+        var audio = GetNode<AudioStreamPlayer>("/root/Main/EnemyHit");
+        audio.Stream = HitSounds.Random();
+        audio.Play();
+
         if (Health <= 0)
         {
             EmitSignal(nameof(EnemyKilled), this);
             QueueFree();
-        }
-    }
-
-    /// <summary>
-    /// Causes the enemy to attack the player TODO: and play the assiociated action
-    /// </summary>
-    public void Fight()
-    {
-        if (Health > 0)
-        {
-            player.Damage(Attack);
         }
     }
 
@@ -131,10 +125,19 @@ public class Enemy : KinematicBody2D
     private Vector2 GetDirectionToPlayer()
     {
         // Determine cardinal direction player is, in relation to the enemy
-        Vector2 offset = this.Position - player.Position;
+        Vector2 offset = (this.Position - player.Position) / (float)TileScale;
+        offset = new Vector2(Mathf.RoundToInt(offset.x), Mathf.RoundToInt(offset.y));
+
         Vector2 direction = Vector2.Zero;
 
-        if (Math.Abs(offset.x) > Math.Abs(offset.y))
+        if (Math.Abs(offset.x) == Math.Abs(offset.y))
+        {
+            if (GD.Randi() % 2 == 0)
+                direction.x += (offset.x < 0 ? 1 : -1);
+            else
+                direction.y += (offset.y < 0 ? 1 : -1);
+        }
+        else if (Math.Abs(offset.x) > Math.Abs(offset.y))
         {
             // More distance to move horizontal, so try to move that way first
             direction.x += (offset.x < 0 ? 1 : -1);

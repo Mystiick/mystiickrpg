@@ -216,7 +216,7 @@ public class Main : Node
     private void OnEnemyKilled(Enemy enemy)
     {
         var stain = new Sprite();
-        stain.Texture = enemy.Bloodstains[GD.Randi() % enemy.Bloodstains.Count()];
+        stain.Texture = enemy.Bloodstains.Random();
         stain.Position = enemy.Position + new Vector2(4, 4);
         _loadedScene.GetNode<Node>("DnS").AddChild(stain);
     }
