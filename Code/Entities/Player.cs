@@ -43,7 +43,7 @@ public class Player : KinematicBody2D
     public void Damage(int amount)
     {
         Health -= amount;
-        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
+        GetNode<HUD>("/root/Main/HUD").UpdateHealth(Health, MaxHealth);
 
         if (Health <= 0)
         {
@@ -61,7 +61,7 @@ public class Player : KinematicBody2D
     {
         Health = Mathf.Clamp(Health + amount, 0, MaxHealth);
 
-        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
+        GetNode<HUD>("/root/Main/HUD").UpdateHealth(Health, MaxHealth);
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public class Player : KinematicBody2D
         Keys = 0;
         CanMove = true;
 
-        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
+        GetNode<HUD>("/root/Main/HUD").UpdateHealth(Health, MaxHealth);
     }
 
     private void HandleInput()
@@ -154,7 +154,7 @@ public class Player : KinematicBody2D
             {
                 door.Unlock();
                 Keys--;
-                GetParent().GetNode<HUD>("HUD").UpdateKeys(Keys);
+                GetNode<HUD>("/root/Main/HUD").UpdateKeys(Keys);
                 FinishTurn();
             }
             else if (door.State == Door.DoorState.Closed)

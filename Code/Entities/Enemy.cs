@@ -18,7 +18,7 @@ public class Enemy : KinematicBody2D
 
     public override void _Ready()
     {
-        player = GetTree().Root.GetNode<Player>("Main/Player");
+        player = GetTree().Root.GetNode<Player>("/root/Main/GameContainer/GameCam/Player");
     }
 
     /// <summary>
