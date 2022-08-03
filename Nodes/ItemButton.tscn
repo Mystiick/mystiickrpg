@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Code/UI/ItemButton.cs" type="Script" id=1]
+
+[node name="Item" type="TextureButton"]
+margin_right = 12.0
+margin_bottom = 12.0
+expand = true
+script = ExtResource( 1 )
+
+[connection signal="pressed" from="." to="." method="OnItemPressed"]

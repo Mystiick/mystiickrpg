@@ -43,7 +43,10 @@ public class Inventory : IEnumerable<Item>
         for (int i = 0; i < _items.Length; i++)
         {
             if (_items[i] == item)
+            {
+                _items[i].Use();
                 _items[i] = null;
+            }
         }
     }
 

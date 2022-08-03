@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Nodes/UI/Theme.tres" type="Theme" id=1]
 [ext_resource path="res://Code/UI/HUD.cs" type="Script" id=2]
 [ext_resource path="res://Assets/inventory.png" type="Texture" id=3]
+[ext_resource path="res://Code/UI/ItemButton.cs" type="Script" id=4]
 [ext_resource path="res://Assets/empty_bar.png" type="Texture" id=5]
 [ext_resource path="res://Assets/white-bar.png" type="Texture" id=6]
+[ext_resource path="res://Nodes/ItemButton.tscn" type="PackedScene" id=7]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 2 )
@@ -67,14 +69,11 @@ margin_top = 80.0
 margin_right = 55.0
 margin_bottom = 142.0
 
-[node name="0" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="0" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 1.0
 margin_top = 1.0
 margin_right = 13.0
 margin_bottom = 13.0
-hint_tooltip = "(Click to use)
-This is a test"
-expand = true
 
 [node name="1" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 17.0
@@ -82,6 +81,7 @@ margin_top = 1.0
 margin_right = 29.0
 margin_bottom = 13.0
 expand = true
+script = ExtResource( 4 )
 
 [node name="2" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 33.0
@@ -89,6 +89,7 @@ margin_top = 1.0
 margin_right = 45.0
 margin_bottom = 13.0
 expand = true
+script = ExtResource( 4 )
 
 [node name="3" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 1.0
@@ -96,6 +97,7 @@ margin_top = 17.0
 margin_right = 13.0
 margin_bottom = 29.0
 expand = true
+script = ExtResource( 4 )
 
 [node name="4" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 17.0
@@ -103,6 +105,7 @@ margin_top = 17.0
 margin_right = 29.0
 margin_bottom = 29.0
 expand = true
+script = ExtResource( 4 )
 
 [node name="5" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 33.0
@@ -110,6 +113,7 @@ margin_top = 17.0
 margin_right = 45.0
 margin_bottom = 29.0
 expand = true
+script = ExtResource( 4 )
 
 [node name="6" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 1.0
@@ -117,6 +121,7 @@ margin_top = 33.0
 margin_right = 13.0
 margin_bottom = 45.0
 expand = true
+script = ExtResource( 4 )
 
 [node name="7" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 17.0
@@ -124,6 +129,7 @@ margin_top = 33.0
 margin_right = 29.0
 margin_bottom = 45.0
 expand = true
+script = ExtResource( 4 )
 
 [node name="8" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 33.0
@@ -131,6 +137,7 @@ margin_top = 33.0
 margin_right = 45.0
 margin_bottom = 45.0
 expand = true
+script = ExtResource( 4 )
 
 [node name="9" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 1.0
@@ -138,6 +145,7 @@ margin_top = 49.0
 margin_right = 13.0
 margin_bottom = 61.0
 expand = true
+script = ExtResource( 4 )
 
 [node name="10" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 17.0
@@ -145,6 +153,7 @@ margin_top = 49.0
 margin_right = 29.0
 margin_bottom = 61.0
 expand = true
+script = ExtResource( 4 )
 
 [node name="11" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
 margin_left = 33.0
@@ -152,8 +161,8 @@ margin_top = 49.0
 margin_right = 45.0
 margin_bottom = 61.0
 expand = true
+script = ExtResource( 4 )
 
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/0" to="." method="OnInventoryItemUsed" binds= [ 0 ]]
 [connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/1" to="." method="OnInventoryItemUsed" binds= [ 1 ]]
 [connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/2" to="." method="OnInventoryItemUsed" binds= [ 2 ]]
 [connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/3" to="." method="OnInventoryItemUsed" binds= [ 3 ]]
