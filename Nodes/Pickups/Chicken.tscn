@@ -11,6 +11,10 @@ extents = Vector2( 3, 3 )
 [node name="Chicken" type="Area2D" groups=["pickups"]]
 script = ExtResource( 2 )
 PickupSounds = [ ExtResource( 3 ), ExtResource( 4 ) ]
+ItemName = "Floor Chicken"
+Tooltip = "(Click to use)
+Heals 6 health"
+Type = 1
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 4, 4 )

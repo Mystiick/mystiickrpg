@@ -12,6 +12,8 @@ public class Main : Node
     private Timeout _enemyMove;
     private Timeout _playerMove;
 
+    public Player CurrentPlayer;
+
     /// <summary>
     /// Called when the node enters the scene tree for the first time.
     /// </summary>
@@ -22,7 +24,8 @@ public class Main : Node
 
         GetNode<HUD>("HUD").GetChild<Control>(0).Hide();
         GetNode<YouDied>("YouDied").GetChild<Control>(0).Hide();
-        GetNode<Player>("/root/Main/GameContainer/GameCam/Player").Hide();
+        CurrentPlayer = GetNode<Player>("/root/Main/GameContainer/GameCam/Player");
+        CurrentPlayer.Hide();
 
         _enemyTurns = new Queue<Enemy>();
         _enemyMove = new Timeout(.1f);
@@ -57,10 +60,9 @@ public class Main : Node
         {
             _playerMove.Process(delta);
 
-            var p = GetNode<Player>("/root/Main/GameContainer/GameCam/Player");
-            if (_playerMove.Elapsed && p.Health > 0)
+            if (_playerMove.Elapsed && CurrentPlayer.Health > 0)
             {
-                p.CanMove = true;
+                CurrentPlayer.CanMove = true;
             }
         }
     }
@@ -107,10 +109,8 @@ public class Main : Node
         GetNode("/root/Main/GameContainer/GameCam").MoveChild(sender, 0);
 
         // Move the player to the spawn point
-
-        Player player = GetNode<Player>("/root/Main/GameContainer/GameCam/Player");
         Position2D playerSpawn = sender.GetNode<Position2D>("PlayerSpawn");
-        player.Position = playerSpawn.Position;
+        CurrentPlayer.Position = playerSpawn.Position;
 
         // Listen to events for pickups and stairs
         Godot.Collections.Array pickups = GetTree().GetNodesInGroup("pickups");
@@ -156,8 +156,8 @@ public class Main : Node
         GetNode<MainMenu>("MainMenu").GetChild<Control>(0).Hide();
         GetNode<HUD>("HUD").GetChild<Control>(0).Show();
 
-        GetNode<Player>("/root/Main/GameContainer/GameCam/Player").Reset();
-        GetNode<Player>("/root/Main/GameContainer/GameCam/Player").Show();
+        CurrentPlayer.Reset();
+        CurrentPlayer.Show();
 
         LoadMap("Level1");
     }
@@ -188,7 +188,7 @@ public class Main : Node
     {
         var ui = GetNode<YouDied>("YouDied");
         ui.GetChild<Control>(0).Show();
-        ui.UpdateDeathStats(GetNode<Player>("/root/Main/GameContainer/GameCam/Player"));
+        ui.UpdateDeathStats(CurrentPlayer);
     }
 
     /// <summary>
@@ -198,9 +198,7 @@ public class Main : Node
     private void OnItemPickedUp(Pickup item)
     {
         HUD hud = GetNode<HUD>("/root/Main/HUD");
-        Player player = GetNode<Player>("/root/Main/GameContainer/GameCam/Player");
-
-        hud.UpdateHUD(player);
+        hud.UpdateHUD(CurrentPlayer);
     }
 
     /// <summary>

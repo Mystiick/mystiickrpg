@@ -2,15 +2,13 @@ using Godot;
 using System;
 using System.Linq;
 
-public class Enemy : KinematicBody2D
+public class Enemy : Entity
 {
     [Signal] public delegate void EnemyKilled(Enemy me);
     [Export] EnemyType Type;
     [Export] public int TileScale = 8;
     [Export] public Texture[] Bloodstains;
     [Export] public AudioStream[] HitSounds;
-    [Export] public int Health { get; private set; }
-    [Export] public int Attack { get; private set; }
     [Export] public int Range { get; private set; }
     public bool CanSeePlayer { get; private set; }
 
@@ -18,7 +16,7 @@ public class Enemy : KinematicBody2D
 
     public override void _Ready()
     {
-        player = GetTree().Root.GetNode<Player>("/root/Main/GameContainer/GameCam/Player");
+        player = GetTree().Root.GetNode<Main>("/root/Main/").CurrentPlayer;
     }
 
     /// <summary>

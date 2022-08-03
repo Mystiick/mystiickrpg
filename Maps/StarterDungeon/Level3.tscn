@@ -18,7 +18,7 @@ script = ExtResource( 2 )
 [node name="PlayerSpawn" type="Position2D" parent="."]
 position = Vector2( 40, 16 )
 
-[node name="DnS" type="Node2D" parent="."]
+[node name="DnS" type="Node" parent="."]
 
 [node name="Stairs" parent="DnS" instance=ExtResource( 1 )]
 position = Vector2( 168, 224 )
@@ -55,7 +55,7 @@ position = Vector2( 136, 104 )
 [node name="Door10" parent="DnS" instance=ExtResource( 3 )]
 position = Vector2( 136, 56 )
 
-[node name="Pickups" type="Node2D" parent="."]
+[node name="Pickups" type="Node" parent="."]
 
 [node name="Chicken" parent="Pickups" instance=ExtResource( 7 )]
 position = Vector2( 144, 24 )
@@ -72,7 +72,7 @@ position = Vector2( 312, 176 )
 [node name="Chicken5" parent="Pickups" instance=ExtResource( 7 )]
 position = Vector2( 40, 160 )
 
-[node name="Enemies" type="Node2D" parent="."]
+[node name="Enemies" type="Node" parent="."]
 
 [node name="Skeleton" parent="Enemies" instance=ExtResource( 5 )]
 position = Vector2( 72, 112 )
