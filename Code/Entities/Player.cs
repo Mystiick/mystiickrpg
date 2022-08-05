@@ -1,21 +1,13 @@
 using Godot;
-using System;
+using System.Linq;
 
-public class Player : KinematicBody2D
+public class Player : Entity
 {
     [Signal] public delegate void PlayerMoved();
     [Signal] public delegate void PlayerDied();
     [Export] public int TileScale = 8;
     [Export] public AudioStream[] Footsteps;
     [Export] public AudioStream DeathSound;
-
-
-    public int MaxHealth { get; private set; }
-    public int Health { get; private set; }
-    public int Shield { get; private set; }
-    public int Attack { get; private set; }
-    public int Keys { get; set; }
-    public bool CanMove { get; set; }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -43,7 +35,7 @@ public class Player : KinematicBody2D
     public void Damage(int amount)
     {
         Health -= amount;
-        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
+        GetNode<HUD>("/root/Main/HUD").UpdateHealth(Health, MaxHealth);
 
         if (Health <= 0)
         {
@@ -57,11 +49,10 @@ public class Player : KinematicBody2D
     /// <summary>
     /// Heals the player for the specified amount, up to the max health
     /// </summary>
-    public void Heal(int amount)
+    public override void Heal(int amount)
     {
-        Health = Mathf.Clamp(Health + amount, 0, MaxHealth);
-
-        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
+        base.Heal(amount);
+        GetNode<HUD>("/root/Main/HUD").UpdateHealth(Health, MaxHealth);
     }
 
     /// <summary>
@@ -71,12 +62,12 @@ public class Player : KinematicBody2D
     {
         MaxHealth = 10;
         Health = 10;
-        Shield = 0;
+        //Shield = 0;
         Attack = 1;
-        Keys = 0;
         CanMove = true;
 
-        GetParent().GetNode<HUD>("HUD").UpdateHealth(Health, MaxHealth);
+        Inventory.Clear();
+        GetNode<HUD>("/root/Main/HUD").UpdateHUD(this);
     }
 
     private void HandleInput()
@@ -150,11 +141,12 @@ public class Player : KinematicBody2D
         }
         else if (collision.Collider is Door door)
         {
-            if (door.State == Door.DoorState.Locked && Keys > 0)
+            if (door.State == Door.DoorState.Locked && this.Inventory.Any(x => x is Key))
             {
+                this.Inventory.UseItem(this.Inventory.First(x => x is Key));
+
                 door.Unlock();
-                Keys--;
-                GetParent().GetNode<HUD>("HUD").UpdateKeys(Keys);
+                GetNode<HUD>("/root/Main/HUD").UpdateHUD(this);
                 FinishTurn();
             }
             else if (door.State == Door.DoorState.Closed)

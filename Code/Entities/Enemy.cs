@@ -2,15 +2,13 @@ using Godot;
 using System;
 using System.Linq;
 
-public class Enemy : KinematicBody2D
+public class Enemy : Entity
 {
     [Signal] public delegate void EnemyKilled(Enemy me);
     [Export] EnemyType Type;
     [Export] public int TileScale = 8;
     [Export] public Texture[] Bloodstains;
     [Export] public AudioStream[] HitSounds;
-    [Export] public int Health { get; private set; }
-    [Export] public int Attack { get; private set; }
     [Export] public int Range { get; private set; }
     public bool CanSeePlayer { get; private set; }
 
@@ -18,7 +16,7 @@ public class Enemy : KinematicBody2D
 
     public override void _Ready()
     {
-        player = GetTree().Root.GetNode<Player>("Main/Player");
+        player = GetTree().Root.GetNode<Main>("/root/Main/").CurrentPlayer;
     }
 
     /// <summary>
@@ -122,6 +120,10 @@ public class Enemy : KinematicBody2D
         }
     }
 
+    /// <summary>
+    /// Gets a normalized NSEW direction to the player. It only ever returns a cardinal direction, never NE, NW, SE, SW. 
+    /// If the player is an equal distance vertically and horizontally from the unit, it will return a random direction of the two.
+    /// </summary>
     private Vector2 GetDirectionToPlayer()
     {
         // Determine cardinal direction player is, in relation to the enemy

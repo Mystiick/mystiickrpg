@@ -8,9 +8,21 @@ public class Main : Node
     private Node _loadedScene;
     private string _worldPrefix;
     private Queue<Enemy> _enemyTurns;
-
     private Timeout _enemyMove;
     private Timeout _playerMove;
+    private Player _player;
+
+    public Player CurrentPlayer
+    {
+        get
+        {
+            return _player ?? GetNode<Player>("%Player");
+        }
+        private set
+        {
+            _player = value;
+        }
+    }
 
     /// <summary>
     /// Called when the node enters the scene tree for the first time.
@@ -22,7 +34,8 @@ public class Main : Node
 
         GetNode<HUD>("HUD").GetChild<Control>(0).Hide();
         GetNode<YouDied>("YouDied").GetChild<Control>(0).Hide();
-        GetNode<Player>("Player").Hide();
+        CurrentPlayer = GetNode<Player>("%Player");
+        CurrentPlayer.Hide();
 
         _enemyTurns = new Queue<Enemy>();
         _enemyMove = new Timeout(.1f);
@@ -39,6 +52,9 @@ public class Main : Node
         HandleTimers(delta);
     }
 
+    /// <summary>
+    /// Handles the player and enemy turn timers to give some delay to player and enemy movement.
+    /// </summary>
     private void HandleTimers(float delta)
     {
         if (_enemyTurns.Any())
@@ -48,19 +64,18 @@ public class Main : Node
             if (_enemyMove.Elapsed)
             {
                 _enemyMove.Reset();
-                var e = _enemyTurns.Dequeue();
-                if (IsInstanceValid(e))
-                    e.TakeTurn();
+                var enemy = _enemyTurns.Dequeue();
+                if (IsInstanceValid(enemy))
+                    enemy.TakeTurn();
             }
         }
         else
         {
             _playerMove.Process(delta);
 
-            var p = GetNode<Player>("Player");
-            if (_playerMove.Elapsed && p.Health > 0)
+            if (_playerMove.Elapsed && CurrentPlayer.Health > 0)
             {
-                p.CanMove = true;
+                CurrentPlayer.CanMove = true;
             }
         }
     }
@@ -73,13 +88,10 @@ public class Main : Node
         UnloadCurrentMap();
 
         Node scene = ResourceLoader.Load<PackedScene>($"res://Maps/{_worldPrefix}{map}.tscn").Instance();
-        Player player = this.GetNode<Player>("Player");
-        Position2D playerSpawn = scene.GetNode<Position2D>("PlayerSpawn");
-
         _loadedScene = scene;
         _loadedScene.Connect(nameof(Level.LevelLoaded), this, "OnLevelLoaded");
 
-        this.CallDeferred("add_child", scene);
+        GetNode("GameContainer").GetNode("GameCam").CallDeferred("add_child", scene);
     }
 
     private void UnloadCurrentMap()
@@ -107,32 +119,21 @@ public class Main : Node
     private void OnLevelLoaded(Level sender)
     {
         // Move the level up to the top level, so it doesn't draw over the player/enemies
-        this.MoveChild(sender, 1);
+        GetNode("/root/Main/GameContainer/GameCam").MoveChild(sender, 0);
 
         // Move the player to the spawn point
-        Player player = GetNode<Player>("Player");
         Position2D playerSpawn = sender.GetNode<Position2D>("PlayerSpawn");
-        player.Position = playerSpawn.Position;
+        CurrentPlayer.Position = playerSpawn.Position;
 
-        // Listen to events for pickups and stairs
+        // Listen to events for pickups and stairs and enemies
         Godot.Collections.Array pickups = GetTree().GetNodesInGroup("pickups");
-        foreach (Pickup p in pickups)
-        {
-            if (!p.IsQueuedForDeletion())
-                p.Connect(nameof(Pickup.ItemPickedUp), this, nameof(OnItemPickedUp));
-        }
+        pickups.ConnectAll(nameof(Pickup.ItemPickedUp), this, nameof(OnItemPickedUp));
+
         Godot.Collections.Array stairs = GetTree().GetNodesInGroup("stairs");
-        foreach (Stairs s in stairs)
-        {
-            if (!s.IsQueuedForDeletion())
-                s.Connect(nameof(Stairs.StairsEntered), this, nameof(OnStairsEntered));
-        }
+        stairs.ConnectAll(nameof(Stairs.StairsEntered), this, nameof(OnStairsEntered));
+
         Godot.Collections.Array enemies = GetTree().GetNodesInGroup("enemies");
-        foreach (Enemy e in enemies)
-        {
-            if (!e.IsQueuedForDeletion())
-                e.Connect(nameof(Enemy.EnemyKilled), this, nameof(OnEnemyKilled));
-        }
+        enemies.ConnectAll(nameof(Enemy.EnemyKilled), this, nameof(OnEnemyKilled));
     }
 
     #region | UI Events |
@@ -158,8 +159,8 @@ public class Main : Node
         GetNode<MainMenu>("MainMenu").GetChild<Control>(0).Hide();
         GetNode<HUD>("HUD").GetChild<Control>(0).Show();
 
-        GetNode<Player>("Player").Reset();
-        GetNode<Player>("Player").Show();
+        CurrentPlayer.Reset();
+        CurrentPlayer.Show();
 
         LoadMap("Level1");
     }
@@ -190,19 +191,16 @@ public class Main : Node
     {
         var ui = GetNode<YouDied>("YouDied");
         ui.GetChild<Control>(0).Show();
-        ui.UpdateDeathStats(GetNode<Player>("Player"));
+        ui.UpdateDeathStats(CurrentPlayer);
     }
 
     /// <summary>
-    /// Handles the event after the player has picked up an item. 
-    /// TODO: {Adds to inventory if applicable, and} updates the HUD with newest inventory
+    /// Handles the event after the player has picked up an item.
     /// </summary>
     private void OnItemPickedUp(Pickup item)
     {
         HUD hud = GetNode<HUD>("/root/Main/HUD");
-        Player player = GetNode<Player>("/root/Main/Player");
-
-        hud.UpdateHUD(player);
+        hud.UpdateHUD(CurrentPlayer);
     }
 
     /// <summary>
@@ -215,6 +213,7 @@ public class Main : Node
 
     private void OnEnemyKilled(Enemy enemy)
     {
+        // Place a randomized bloodstain on the ground and put it in the DnS layer
         var stain = new Sprite();
         stain.Texture = enemy.Bloodstains.Random();
         stain.Position = enemy.Position + new Vector2(4, 4);
