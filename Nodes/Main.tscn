@@ -57,6 +57,7 @@ handle_input_locally = false
 render_target_update_mode = 3
 
 [node name="Player" parent="GameContainer/GameCam" instance=ExtResource( 2 )]
+unique_name_in_owner = true
 
 [connection signal="LoadLevelPressed" from="DebugUI" to="." method="OnDebugLoadLevelPressed"]
 [connection signal="StartButtonPressed" from="MainMenu" to="." method="OnMainMenuStartButtonPressed"]

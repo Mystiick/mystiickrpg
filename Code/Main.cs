@@ -16,7 +16,7 @@ public class Main : Node
     {
         get
         {
-            return _player ?? GetNode<Player>("/root/Main/GameContainer/GameCam/Player");
+            return _player ?? GetNode<Player>("%Player");
         }
         private set
         {
@@ -34,7 +34,7 @@ public class Main : Node
 
         GetNode<HUD>("HUD").GetChild<Control>(0).Hide();
         GetNode<YouDied>("YouDied").GetChild<Control>(0).Hide();
-        CurrentPlayer = GetNode<Player>("/root/Main/GameContainer/GameCam/Player");
+        CurrentPlayer = GetNode<Player>("%Player");
         CurrentPlayer.Hide();
 
         _enemyTurns = new Queue<Enemy>();
