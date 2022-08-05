@@ -1,9 +1,8 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Nodes/UI/Theme.tres" type="Theme" id=1]
 [ext_resource path="res://Code/UI/HUD.cs" type="Script" id=2]
 [ext_resource path="res://Assets/inventory.png" type="Texture" id=3]
-[ext_resource path="res://Code/UI/ItemButton.cs" type="Script" id=4]
 [ext_resource path="res://Assets/empty_bar.png" type="Texture" id=5]
 [ext_resource path="res://Assets/white-bar.png" type="Texture" id=6]
 [ext_resource path="res://Nodes/ItemButton.tscn" type="PackedScene" id=7]
@@ -75,102 +74,68 @@ margin_top = 1.0
 margin_right = 13.0
 margin_bottom = 13.0
 
-[node name="1" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="1" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 17.0
 margin_top = 1.0
 margin_right = 29.0
 margin_bottom = 13.0
-expand = true
-script = ExtResource( 4 )
 
-[node name="2" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="2" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 33.0
 margin_top = 1.0
 margin_right = 45.0
 margin_bottom = 13.0
-expand = true
-script = ExtResource( 4 )
 
-[node name="3" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="3" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 1.0
 margin_top = 17.0
 margin_right = 13.0
 margin_bottom = 29.0
-expand = true
-script = ExtResource( 4 )
 
-[node name="4" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="4" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 17.0
 margin_top = 17.0
 margin_right = 29.0
 margin_bottom = 29.0
-expand = true
-script = ExtResource( 4 )
 
-[node name="5" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="5" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 33.0
 margin_top = 17.0
 margin_right = 45.0
 margin_bottom = 29.0
-expand = true
-script = ExtResource( 4 )
 
-[node name="6" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="6" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 1.0
 margin_top = 33.0
 margin_right = 13.0
 margin_bottom = 45.0
-expand = true
-script = ExtResource( 4 )
 
-[node name="7" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="7" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 17.0
 margin_top = 33.0
 margin_right = 29.0
 margin_bottom = 45.0
-expand = true
-script = ExtResource( 4 )
 
-[node name="8" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="8" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 33.0
 margin_top = 33.0
 margin_right = 45.0
 margin_bottom = 45.0
-expand = true
-script = ExtResource( 4 )
 
-[node name="9" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="9" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 1.0
 margin_top = 49.0
 margin_right = 13.0
 margin_bottom = 61.0
-expand = true
-script = ExtResource( 4 )
 
-[node name="10" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="10" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 17.0
 margin_top = 49.0
 margin_right = 29.0
 margin_bottom = 61.0
-expand = true
-script = ExtResource( 4 )
 
-[node name="11" type="TextureButton" parent="Base/InventoryAndPaperdoll/Inventory"]
+[node name="11" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
 margin_left = 33.0
 margin_top = 49.0
 margin_right = 45.0
 margin_bottom = 61.0
-expand = true
-script = ExtResource( 4 )
-
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/1" to="." method="OnInventoryItemUsed" binds= [ 1 ]]
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/2" to="." method="OnInventoryItemUsed" binds= [ 2 ]]
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/3" to="." method="OnInventoryItemUsed" binds= [ 3 ]]
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/4" to="." method="OnInventoryItemUsed" binds= [ 4 ]]
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/5" to="." method="OnInventoryItemUsed" binds= [ 5 ]]
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/6" to="." method="OnInventoryItemUsed" binds= [ 6 ]]
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/7" to="." method="OnInventoryItemUsed" binds= [ 7 ]]
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/8" to="." method="OnInventoryItemUsed" binds= [ 8 ]]
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/9" to="." method="OnInventoryItemUsed" binds= [ 9 ]]
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/10" to="." method="OnInventoryItemUsed" binds= [ 10 ]]
-[connection signal="pressed" from="Base/InventoryAndPaperdoll/Inventory/11" to="." method="OnInventoryItemUsed" binds= [ 11 ]]

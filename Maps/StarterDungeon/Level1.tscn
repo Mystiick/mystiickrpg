@@ -34,9 +34,6 @@ Destination = "Level2"
 [node name="Key" parent="Pickups" instance=ExtResource( 3 )]
 position = Vector2( 64, 96 )
 
-[node name="Chicken2" parent="Pickups" instance=ExtResource( 4 )]
-position = Vector2( 104, 48 )
-
 [node name="Chicken" parent="Pickups" instance=ExtResource( 4 )]
 position = Vector2( 176, 144 )
 

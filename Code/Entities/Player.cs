@@ -66,7 +66,8 @@ public class Player : Entity
         Attack = 1;
         CanMove = true;
 
-        GetNode<HUD>("/root/Main/HUD").UpdateHealth(Health, MaxHealth);
+        Inventory.Clear();
+        GetNode<HUD>("/root/Main/HUD").UpdateHUD(this);
     }
 
     private void HandleInput()

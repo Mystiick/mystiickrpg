@@ -77,6 +77,12 @@ position = Vector2( 40, 160 )
 [node name="Skeleton" parent="Enemies" instance=ExtResource( 5 )]
 position = Vector2( 72, 112 )
 
+[node name="Skeleton3" parent="Enemies" instance=ExtResource( 5 )]
+position = Vector2( 168, 16 )
+
+[node name="Skeleton4" parent="Enemies" instance=ExtResource( 5 )]
+position = Vector2( 312, 200 )
+
 [node name="Zombie4" parent="Enemies" instance=ExtResource( 4 )]
 position = Vector2( 304, 112 )
 

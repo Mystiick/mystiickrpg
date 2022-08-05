@@ -40,6 +40,8 @@ public class Inventory : IEnumerable<Item>
     }
     public void UseItem(Item item)
     {
+        System.Diagnostics.Debug.Assert(item != null, "Item cannot be null");
+
         for (int i = 0; i < _items.Length; i++)
         {
             if (_items[i] == item)
@@ -54,6 +56,12 @@ public class Inventory : IEnumerable<Item>
     {
         _items[index].Use();
         _items[index] = null;
+    }
+
+    public void Clear()
+    {
+        for (int i = 0; i < _items.Length; i++)
+            _items[i] = null;
     }
 
     #region | IEnumerator & IE<Item> Implementation |
