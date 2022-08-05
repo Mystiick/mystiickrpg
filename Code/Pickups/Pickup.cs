@@ -17,6 +17,10 @@ public class Pickup : Area2D
         }
     }
 
+    /// <summary>
+    /// If the player's inventory has space, picks ups the item, plays any associated sounds, and adds the item to the inventory.
+    /// Frees the pickup after it has been picked
+    /// </summary>
     public virtual void HandlePickup(Player player)
     {
         if (player.Inventory.HasSpace())

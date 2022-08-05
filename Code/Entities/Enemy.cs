@@ -120,6 +120,10 @@ public class Enemy : Entity
         }
     }
 
+    /// <summary>
+    /// Gets a normalized NSEW direction to the player. It only ever returns a cardinal direction, never NE, NW, SE, SW. 
+    /// If the player is an equal distance vertically and horizontally from the unit, it will return a random direction of the two.
+    /// </summary>
     private Vector2 GetDirectionToPlayer()
     {
         // Determine cardinal direction player is, in relation to the enemy
