@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://dungeon_tileset.tres" type="TileSet" id=1]
-[ext_resource path="res://Nodes/Stairs.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Nodes/Environmental/Stairs.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Code/Level.cs" type="Script" id=3]
 [ext_resource path="res://Nodes/Pickups/Chicken.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Nodes/Enemies/Crab.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Nodes/Environmental/Torch.tscn" type="PackedScene" id=6]
 
 [node name="TileMap" type="TileMap"]
 tile_set = ExtResource( 1 )
@@ -16,7 +17,29 @@ script = ExtResource( 3 )
 [node name="PlayerSpawn" type="Position2D" parent="."]
 position = Vector2( 48, 64 )
 
-[node name="DnS" type="Node" parent="."]
+[node name="Environment" type="Node" parent="."]
+
+[node name="Stairs" parent="Environment" instance=ExtResource( 2 )]
+position = Vector2( 304, 152 )
+Destination = "Level1"
+
+[node name="Torch" parent="Environment" instance=ExtResource( 6 )]
+position = Vector2( 80, 80 )
+
+[node name="Torch2" parent="Environment" instance=ExtResource( 6 )]
+position = Vector2( 144, 80 )
+
+[node name="Torch4" parent="Environment" instance=ExtResource( 6 )]
+position = Vector2( 192, 56 )
+
+[node name="Torch5" parent="Environment" instance=ExtResource( 6 )]
+position = Vector2( 240, 56 )
+
+[node name="Torch6" parent="Environment" instance=ExtResource( 6 )]
+position = Vector2( 280, 144 )
+
+[node name="Torch3" parent="Environment" instance=ExtResource( 6 )]
+position = Vector2( 112, 80 )
 
 [node name="Pickups" type="Node" parent="."]
 
@@ -36,7 +59,3 @@ position = Vector2( 248, 72 )
 
 [node name="Crab" parent="Enemies" instance=ExtResource( 5 )]
 position = Vector2( 208, 120 )
-
-[node name="Stairs" parent="." instance=ExtResource( 2 )]
-position = Vector2( 304, 152 )
-Destination = "Level1"

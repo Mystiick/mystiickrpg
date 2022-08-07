@@ -145,7 +145,18 @@ public class Main : Node
 
     private void OnDebugLoadLevelPressed(string level)
     {
-        LoadMap(level);
+        switch (level.ToLower())
+        {
+            case "genji":
+                _player.Heal(_player.MaxHealth);
+                break;
+            case "thisisfine":
+                foreach (var light in GetTree().GetNodesInGroup("lights").Cast<Light2D>()) { light.Enabled = true; }
+                break;
+            default:
+                LoadMap(level);
+                break;
+        }
     }
 
     private void OnYouDiedRetryPressed()
@@ -213,11 +224,11 @@ public class Main : Node
 
     private void OnEnemyKilled(Enemy enemy)
     {
-        // Place a randomized bloodstain on the ground and put it in the DnS layer
+        // Place a randomized bloodstain on the ground and put it in the Environment layer
         var stain = new Sprite();
         stain.Texture = enemy.Bloodstains.Random();
         stain.Position = enemy.Position + new Vector2(4, 4);
-        _loadedScene.GetNode<Node>("DnS").AddChild(stain);
+        _loadedScene.GetNode<Node>("Environment").AddChild(stain);
     }
 
     #endregion

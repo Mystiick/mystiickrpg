@@ -1,13 +1,14 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://dungeon_tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Nodes/Enemies/Zombie.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Nodes/Pickups/Key.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Nodes/Pickups/Chicken.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Nodes/Door.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Nodes/Stairs.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Nodes/Environmental/Door.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Nodes/Environmental/Stairs.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Code/Level.cs" type="Script" id=7]
 [ext_resource path="res://Nodes/Enemies/Skeleton.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Nodes/Environmental/Torch.tscn" type="PackedScene" id=9]
 
 [node name="TileMap" type="TileMap"]
 tile_set = ExtResource( 1 )
@@ -19,22 +20,40 @@ script = ExtResource( 7 )
 [node name="PlayerSpawn" type="Position2D" parent="."]
 position = Vector2( 200, 192 )
 
-[node name="DnS" type="Node" parent="."]
+[node name="Environment" type="Node" parent="."]
 
-[node name="Stairs" parent="DnS" instance=ExtResource( 6 )]
+[node name="Stairs" parent="Environment" instance=ExtResource( 6 )]
 position = Vector2( 64, 176 )
 Destination = "Level3"
 
-[node name="Door" parent="DnS" instance=ExtResource( 5 )]
+[node name="Door" parent="Environment" instance=ExtResource( 5 )]
 position = Vector2( 152, 208 )
 
-[node name="Door2" parent="DnS" instance=ExtResource( 5 )]
+[node name="Door2" parent="Environment" instance=ExtResource( 5 )]
 position = Vector2( 64, 152 )
 State = 2
 
-[node name="Door3" parent="DnS" instance=ExtResource( 5 )]
+[node name="Door3" parent="Environment" instance=ExtResource( 5 )]
 position = Vector2( 216, 104 )
 State = 2
+
+[node name="Torch" parent="Environment" instance=ExtResource( 9 )]
+position = Vector2( 144, 112 )
+
+[node name="Torch2" parent="Environment" instance=ExtResource( 9 )]
+position = Vector2( 200, 64 )
+
+[node name="Torch3" parent="Environment" instance=ExtResource( 9 )]
+position = Vector2( 128, 8 )
+
+[node name="Torch4" parent="Environment" instance=ExtResource( 9 )]
+position = Vector2( 208, 104 )
+
+[node name="Torch5" parent="Environment" instance=ExtResource( 9 )]
+position = Vector2( 80, 112 )
+
+[node name="Torch6" parent="Environment" instance=ExtResource( 9 )]
+position = Vector2( 104, 208 )
 
 [node name="Pickups" type="Node" parent="."]
 
