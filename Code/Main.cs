@@ -153,6 +153,9 @@ public class Main : Node
             case "thisisfine":
                 foreach (var light in GetTree().GetNodesInGroup("lights").Cast<Light2D>()) { light.Enabled = true; }
                 break;
+            case "lightsout":
+                _player.GetNode<CanvasModulate>("CanvasModulate").Visible = !_player.GetNode<CanvasModulate>("CanvasModulate").Visible;
+                break;
             default:
                 LoadMap(level);
                 break;

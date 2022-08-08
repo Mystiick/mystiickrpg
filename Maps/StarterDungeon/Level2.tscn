@@ -38,7 +38,7 @@ position = Vector2( 216, 104 )
 State = 2
 
 [node name="Torch" parent="Environment" instance=ExtResource( 9 )]
-position = Vector2( 144, 112 )
+position = Vector2( 136, 112 )
 
 [node name="Torch2" parent="Environment" instance=ExtResource( 9 )]
 position = Vector2( 200, 64 )
@@ -53,7 +53,7 @@ position = Vector2( 208, 104 )
 position = Vector2( 80, 112 )
 
 [node name="Torch6" parent="Environment" instance=ExtResource( 9 )]
-position = Vector2( 104, 208 )
+position = Vector2( 144, 208 )
 
 [node name="Pickups" type="Node" parent="."]
 

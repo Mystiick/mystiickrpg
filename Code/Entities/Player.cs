@@ -62,7 +62,6 @@ public class Player : Entity
     {
         MaxHealth = 10;
         Health = 10;
-        //Shield = 0;
         Attack = 1;
         CanMove = true;
 
