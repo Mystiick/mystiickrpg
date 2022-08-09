@@ -29,11 +29,13 @@ public class Main : Node
     /// </summary>
     public override void _Ready()
     {
-        //OS.WindowMaximized = true;
+        LoadSettings();
+
         _worldPrefix = "StarterDungeon/";
 
         GetNode<HUD>("HUD").GetChild<Control>(0).Hide();
         GetNode<YouDied>("YouDied").GetChild<Control>(0).Hide();
+        GetNode<SettingsUI>("Settings").GetChild<Control>(0).Hide();
         CurrentPlayer = GetNode<Player>("%Player");
         CurrentPlayer.Hide();
 
@@ -136,11 +138,37 @@ public class Main : Node
         enemies.ConnectAll(nameof(Enemy.EnemyKilled), this, nameof(OnEnemyKilled));
     }
 
+    private void LoadSettings()
+    {
+        var settings = GetNode<SettingsUI>("Settings").CurrentSettings;
+
+        // Update video settings
+        OS.WindowMaximized = settings.Window == Settings.WindowType.Maximized;
+        OS.WindowFullscreen = settings.Window == Settings.WindowType.BorderlessWindowed;
+
+        Engine.TargetFps = settings.MaxFps;
+
+        // Update Sound settings
+        foreach (AudioStreamPlayer a in GetTree().GetNodesInGroup("background_noise"))
+            a.VolumeDb = GD.Linear2Db(settings.BackgroundVolume * settings.MasterVolume);
+
+        foreach (AudioStreamPlayer a in GetTree().GetNodesInGroup("sound_effects"))
+            a.VolumeDb = GD.Linear2Db(settings.SoundEffectsVolume * settings.MasterVolume);
+
+        // Start the background noise if it's not already running
+        if (!GetNode<AudioStreamPlayer>("BackgroundNoise").Playing)
+            GetNode<AudioStreamPlayer>("BackgroundNoise").Play();
+    }
+
     #region | UI Events |
 
     private void OnMainMenuStartButtonPressed()
     {
         RestartGame();
+    }
+    private void OnMainMenuSettingsButtonPressed()
+    {
+        GetNode<SettingsUI>("Settings").GetChild<Control>(0).Show();
     }
 
     private void OnDebugLoadLevelPressed(string level)
@@ -165,6 +193,11 @@ public class Main : Node
     private void OnYouDiedRetryPressed()
     {
         RestartGame();
+    }
+
+    private void OnSettingsUpdated()
+    {
+        LoadSettings();
     }
 
     private void RestartGame()
