@@ -3,13 +3,7 @@ using System;
 
 public class DebugUI : CanvasLayer
 {
-
     [Signal] public delegate void LoadLevelPressed(string level);
-
-    public override void _Ready()
-    {
-
-    }
 
     #region | Load Level Popup |
     public void ShowLevelSelect()

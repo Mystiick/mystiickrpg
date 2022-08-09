@@ -62,7 +62,6 @@ public class Player : Entity
     {
         MaxHealth = 10;
         Health = 10;
-        //Shield = 0;
         Attack = 1;
         CanMove = true;
 
@@ -72,7 +71,7 @@ public class Player : Entity
 
     private void HandleInput()
     {
-        if (CanMove)
+        if (CanMove && !GetNode<Main>("/root/Main").IsPaused)
         {
             Vector2 direction = Vector2.Zero;
             // Use elses here instead of checking each one individually to make sure only one direction is moved at a time

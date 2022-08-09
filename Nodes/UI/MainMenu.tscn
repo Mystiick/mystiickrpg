@@ -50,7 +50,6 @@ margin_bottom = 22.0
 margin_top = 26.0
 margin_right = 54.0
 margin_bottom = 44.0
-disabled = true
 text = "Settings"
 
 [node name="pad2" type="Control" parent="Control/Panel/GridContainer"]
@@ -76,4 +75,5 @@ text = "Run, Escape!"
 align = 1
 
 [connection signal="pressed" from="Control/Panel/GridContainer/Start" to="." method="OnStartPressed"]
+[connection signal="pressed" from="Control/Panel/GridContainer/Settings" to="." method="OnSettingsPressed"]
 [connection signal="pressed" from="Control/Panel/GridContainer/Exit" to="." method="OnExitPressed"]

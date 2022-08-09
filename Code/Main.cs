@@ -11,6 +11,8 @@ public class Main : Node
     private Timeout _enemyMove;
     private Timeout _playerMove;
     private Player _player;
+    private PausedUI _paused;
+    public bool IsPaused;
 
     public Player CurrentPlayer
     {
@@ -29,17 +31,21 @@ public class Main : Node
     /// </summary>
     public override void _Ready()
     {
-        //OS.WindowMaximized = true;
-        _worldPrefix = "StarterDungeon/";
+        LoadSettings();
 
+        _worldPrefix = "StarterDungeon/";
+        _paused = GetNode<PausedUI>("Paused");
+
+        _paused.GetChild<Control>(0).Hide();
         GetNode<HUD>("HUD").GetChild<Control>(0).Hide();
-        GetNode<YouDied>("YouDied").GetChild<Control>(0).Hide();
+        GetNode<SettingsUI>("Settings").GetChild<Control>(0).Hide();
         CurrentPlayer = GetNode<Player>("%Player");
         CurrentPlayer.Hide();
 
         _enemyTurns = new Queue<Enemy>();
         _enemyMove = new Timeout(.1f);
         _playerMove = new Timeout(.1f);
+        IsPaused = true;
     }
 
     public override void _Process(float delta)
@@ -47,6 +53,21 @@ public class Main : Node
         if (Input.IsActionJustPressed("debug"))
         {
             GetNode<DebugUI>("DebugUI").ShowLevelSelect();
+        }
+
+        if (Input.IsActionJustPressed("pause_game"))
+        {
+            if (IsPaused)
+            {
+                IsPaused = false;
+                _paused.GetChild<Control>(0).Hide();
+            }
+            else
+            {
+                IsPaused = true;
+                _paused.GetChild<Control>(0).Show();
+                _paused.GetChild<Control>(0).GetNode<Label>("YouDied").Hide();
+            }
         }
 
         HandleTimers(delta);
@@ -136,26 +157,71 @@ public class Main : Node
         enemies.ConnectAll(nameof(Enemy.EnemyKilled), this, nameof(OnEnemyKilled));
     }
 
+    private void LoadSettings()
+    {
+        var settings = GetNode<SettingsUI>("Settings").CurrentSettings;
+
+        // Update video settings
+        OS.WindowMaximized = settings.Window == Settings.WindowType.Maximized;
+        OS.WindowFullscreen = settings.Window == Settings.WindowType.BorderlessWindowed;
+
+        Engine.TargetFps = settings.MaxFps;
+
+        // Update Sound settings
+        foreach (AudioStreamPlayer a in GetTree().GetNodesInGroup("background_noise"))
+            a.VolumeDb = GD.Linear2Db(settings.BackgroundVolume * settings.MasterVolume);
+
+        foreach (AudioStreamPlayer a in GetTree().GetNodesInGroup("sound_effects"))
+            a.VolumeDb = GD.Linear2Db(settings.SoundEffectsVolume * settings.MasterVolume);
+
+        // Start the background noise if it's not already running
+        if (!GetNode<AudioStreamPlayer>("BackgroundNoise").Playing)
+            GetNode<AudioStreamPlayer>("BackgroundNoise").Play();
+    }
+
     #region | UI Events |
 
     private void OnMainMenuStartButtonPressed()
     {
         RestartGame();
     }
+    private void OnMainMenuSettingsButtonPressed()
+    {
+        GetNode<SettingsUI>("Settings").GetChild<Control>(0).Show();
+    }
 
     private void OnDebugLoadLevelPressed(string level)
     {
-        LoadMap(level);
+        switch (level.ToLower())
+        {
+            case "genji":
+                _player.Heal(_player.MaxHealth);
+                break;
+            case "thisisfine":
+                foreach (var light in GetTree().GetNodesInGroup("lights").Cast<Light2D>()) { light.Enabled = true; }
+                break;
+            case "lightsout":
+                _player.GetNode<CanvasModulate>("CanvasModulate").Visible = !_player.GetNode<CanvasModulate>("CanvasModulate").Visible;
+                break;
+            default:
+                LoadMap(level);
+                break;
+        }
     }
 
-    private void OnYouDiedRetryPressed()
+    private void OnPausedRetryPressed()
     {
         RestartGame();
     }
 
+    private void OnSettingsUpdated()
+    {
+        LoadSettings();
+    }
+
     private void RestartGame()
     {
-        GetNode<YouDied>("YouDied").GetChild<Control>(0).Hide();
+        GetNode<PausedUI>("Paused").GetChild<Control>(0).Hide();
         GetNode<MainMenu>("MainMenu").GetChild<Control>(0).Hide();
         GetNode<HUD>("HUD").GetChild<Control>(0).Show();
 
@@ -163,6 +229,7 @@ public class Main : Node
         CurrentPlayer.Show();
 
         LoadMap("Level1");
+        IsPaused = false;
     }
 
     #endregion
@@ -189,9 +256,10 @@ public class Main : Node
     /// </summary>
     private void OnPlayerDied()
     {
-        var ui = GetNode<YouDied>("YouDied");
-        ui.GetChild<Control>(0).Show();
-        ui.UpdateDeathStats(CurrentPlayer);
+        _paused.GetChild<Control>(0).Show();
+        _paused.GetChild<Control>(0).GetNode<Label>("YouDied").Show();
+        _paused.UpdateDeathStats(CurrentPlayer);
+        IsPaused = true;
     }
 
     /// <summary>
@@ -213,11 +281,11 @@ public class Main : Node
 
     private void OnEnemyKilled(Enemy enemy)
     {
-        // Place a randomized bloodstain on the ground and put it in the DnS layer
+        // Place a randomized bloodstain on the ground and put it in the Environment layer
         var stain = new Sprite();
         stain.Texture = enemy.Bloodstains.Random();
         stain.Position = enemy.Position + new Vector2(4, 4);
-        _loadedScene.GetNode<Node>("DnS").AddChild(stain);
+        _loadedScene.GetNode<Node>("Environment").AddChild(stain);
     }
 
     #endregion

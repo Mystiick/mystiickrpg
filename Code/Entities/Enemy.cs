@@ -16,7 +16,7 @@ public class Enemy : Entity
 
     public override void _Ready()
     {
-        player = GetTree().Root.GetNode<Main>("/root/Main/").CurrentPlayer;
+        player = GetTree().Root.GetNode<Main>("/root/Main/")?.CurrentPlayer;
     }
 
     /// <summary>
@@ -24,12 +24,15 @@ public class Enemy : Entity
     /// </summary>
     public override void _PhysicsProcess(float delta)
     {
-        Physics2DDirectSpaceState spaceState = GetWorld2d().DirectSpaceState;
-
-        var result = spaceState.IntersectRay(this.Position + Vector2.One, player.Position + Vector2.One, new Godot.Collections.Array { this });
-        if (result != null && result.Keys.Cast<string>().Contains("collider"))
+        if (player != null)
         {
-            CanSeePlayer = result["collider"] is Player;
+            Physics2DDirectSpaceState spaceState = GetWorld2d().DirectSpaceState;
+
+            var result = spaceState.IntersectRay(this.Position + Vector2.One, player.Position + Vector2.One, new Godot.Collections.Array { this });
+            if (result != null && result.Keys.Cast<string>().Contains("collider"))
+            {
+                CanSeePlayer = result["collider"] is Player;
+            }
         }
     }
 
