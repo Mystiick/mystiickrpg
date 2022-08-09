@@ -71,7 +71,7 @@ public class Player : Entity
 
     private void HandleInput()
     {
-        if (CanMove)
+        if (CanMove && !GetNode<Main>("/root/Main").IsPaused)
         {
             Vector2 direction = Vector2.Zero;
             // Use elses here instead of checking each one individually to make sure only one direction is moved at a time

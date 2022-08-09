@@ -34,9 +34,9 @@ color = Color( 0, 0, 0, 1 )
 
 [node name="MainMenu" parent="." instance=ExtResource( 5 )]
 
-[node name="Settings" parent="." instance=ExtResource( 8 )]
-
 [node name="Paused" parent="." instance=ExtResource( 6 )]
+
+[node name="Settings" parent="." instance=ExtResource( 8 )]
 
 [node name="BackgroundNoise" type="AudioStreamPlayer" parent="." groups=["background_noise"]]
 stream = ExtResource( 7 )
@@ -64,7 +64,8 @@ unique_name_in_owner = true
 [connection signal="LoadLevelPressed" from="DebugUI" to="." method="OnDebugLoadLevelPressed"]
 [connection signal="SettingsButtonPressed" from="MainMenu" to="." method="OnMainMenuSettingsButtonPressed"]
 [connection signal="StartButtonPressed" from="MainMenu" to="." method="OnMainMenuStartButtonPressed"]
+[connection signal="RestartButtonPressed" from="Paused" to="." method="OnPausedRetryPressed"]
+[connection signal="SettingsPressed" from="Paused" to="." method="OnMainMenuSettingsButtonPressed"]
 [connection signal="SettingsUpdated" from="Settings" to="." method="OnSettingsUpdated"]
-[connection signal="RestartButtonPressed" from="Paused" to="." method="OnYouDiedRetryPressed"]
 [connection signal="PlayerDied" from="GameContainer/GameCam/Player" to="." method="OnPlayerDied"]
 [connection signal="PlayerMoved" from="GameContainer/GameCam/Player" to="." method="OnPlayerMoved"]

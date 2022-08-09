@@ -55,6 +55,21 @@ public class Main : Node
             GetNode<DebugUI>("DebugUI").ShowLevelSelect();
         }
 
+        if (Input.IsActionJustPressed("pause_game"))
+        {
+            if (IsPaused)
+            {
+                IsPaused = false;
+                _paused.GetChild<Control>(0).Hide();
+            }
+            else
+            {
+                IsPaused = true;
+                _paused.GetChild<Control>(0).Show();
+                _paused.GetChild<Control>(0).GetNode<Label>("YouDied").Hide();
+            }
+        }
+
         HandleTimers(delta);
     }
 
@@ -242,6 +257,7 @@ public class Main : Node
     private void OnPlayerDied()
     {
         _paused.GetChild<Control>(0).Show();
+        _paused.GetChild<Control>(0).GetNode<Label>("YouDied").Show();
         _paused.UpdateDeathStats(CurrentPlayer);
         IsPaused = true;
     }
