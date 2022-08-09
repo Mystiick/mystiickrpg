@@ -11,6 +11,8 @@ public class Main : Node
     private Timeout _enemyMove;
     private Timeout _playerMove;
     private Player _player;
+    private PausedUI _paused;
+    public bool IsPaused;
 
     public Player CurrentPlayer
     {
@@ -32,9 +34,10 @@ public class Main : Node
         LoadSettings();
 
         _worldPrefix = "StarterDungeon/";
+        _paused = GetNode<PausedUI>("Paused");
 
+        _paused.GetChild<Control>(0).Hide();
         GetNode<HUD>("HUD").GetChild<Control>(0).Hide();
-        GetNode<YouDied>("YouDied").GetChild<Control>(0).Hide();
         GetNode<SettingsUI>("Settings").GetChild<Control>(0).Hide();
         CurrentPlayer = GetNode<Player>("%Player");
         CurrentPlayer.Hide();
@@ -42,6 +45,7 @@ public class Main : Node
         _enemyTurns = new Queue<Enemy>();
         _enemyMove = new Timeout(.1f);
         _playerMove = new Timeout(.1f);
+        IsPaused = true;
     }
 
     public override void _Process(float delta)
@@ -190,7 +194,7 @@ public class Main : Node
         }
     }
 
-    private void OnYouDiedRetryPressed()
+    private void OnPausedRetryPressed()
     {
         RestartGame();
     }
@@ -202,7 +206,7 @@ public class Main : Node
 
     private void RestartGame()
     {
-        GetNode<YouDied>("YouDied").GetChild<Control>(0).Hide();
+        GetNode<PausedUI>("Paused").GetChild<Control>(0).Hide();
         GetNode<MainMenu>("MainMenu").GetChild<Control>(0).Hide();
         GetNode<HUD>("HUD").GetChild<Control>(0).Show();
 
@@ -210,6 +214,7 @@ public class Main : Node
         CurrentPlayer.Show();
 
         LoadMap("Level1");
+        IsPaused = false;
     }
 
     #endregion
@@ -236,9 +241,9 @@ public class Main : Node
     /// </summary>
     private void OnPlayerDied()
     {
-        var ui = GetNode<YouDied>("YouDied");
-        ui.GetChild<Control>(0).Show();
-        ui.UpdateDeathStats(CurrentPlayer);
+        _paused.GetChild<Control>(0).Show();
+        _paused.UpdateDeathStats(CurrentPlayer);
+        IsPaused = true;
     }
 
     /// <summary>

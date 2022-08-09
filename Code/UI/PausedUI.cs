@@ -1,10 +1,10 @@
 using Godot;
 using System;
 
-public class YouDied : CanvasLayer
+public class PausedUI : CanvasLayer
 {
     [Signal] public delegate void RestartButtonPressed();
-    [Signal] public delegate void MainMenuButtonPressed();
+    [Signal] public delegate void SettingsPressed();
 
     public void UpdateDeathStats(Player p)
     {
@@ -16,9 +16,9 @@ public class YouDied : CanvasLayer
         EmitSignal(nameof(RestartButtonPressed));
     }
 
-    private void OnMainMenuPressed()
+    private void OnSettingsPressed()
     {
-        EmitSignal(nameof(MainMenuButtonPressed));
+        EmitSignal(nameof(SettingsPressed));
     }
 
     private void OnExitPressed()
