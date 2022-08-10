@@ -69,22 +69,6 @@ public class UIManager : Control
     // DebugUI
     public void OnDebugUILoadLevelPressed(string level)
     {
-        var player = GetNode<Main>("/root/Main").CurrentPlayer;
-
-        switch (level.ToLower())
-        {
-            case "genji":
-                player.Heal(player.MaxHealth);
-                break;
-            case "thisisfine":
-                foreach (var light in GetTree().GetNodesInGroup("lights").Cast<Light2D>()) { light.Enabled = true; }
-                break;
-            case "lightsout":
-                player.GetNode<CanvasModulate>("CanvasModulate").Visible = !player.GetNode<CanvasModulate>("CanvasModulate").Visible;
-                break;
-            default:
-                EmitSignal(nameof(DebugLoadLevel), level);
-                break;
-        }
+        EmitSignal(nameof(DebugLoadLevel), level);
     }
 }
