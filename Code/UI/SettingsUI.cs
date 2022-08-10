@@ -44,7 +44,7 @@ public class SettingsUI : CanvasLayer
         SaveSettings();
         EmitSignal(nameof(SettingsUpdated));
 
-        GetNode<Control>("Control").Hide();
+        Hide();
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class SettingsUI : CanvasLayer
     public void OnCancelPressed()
     {
         PopulateForm();
-        GetNode<Control>("Control").Hide();
+        Hide();
     }
 
     /// <summary>

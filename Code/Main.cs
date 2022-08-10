@@ -5,14 +5,16 @@ using System.Linq;
 
 public class Main : Node
 {
+    public bool IsPaused;
+    public UIManager UserInterface;
+
     private Node _loadedScene;
     private string _worldPrefix;
     private Queue<Enemy> _enemyTurns;
     private Timeout _enemyMove;
     private Timeout _playerMove;
     private Player _player;
-    private PausedUI _paused;
-    public bool IsPaused;
+
 
     public Player CurrentPlayer
     {
@@ -31,28 +33,29 @@ public class Main : Node
     /// </summary>
     public override void _Ready()
     {
-        LoadSettings();
-
         _worldPrefix = "StarterDungeon/";
-        _paused = GetNode<PausedUI>("Paused");
 
-        _paused.GetChild<Control>(0).Hide();
-        GetNode<HUD>("HUD").GetChild<Control>(0).Hide();
-        GetNode<SettingsUI>("Settings").GetChild<Control>(0).Hide();
+        UserInterface = GetNode<UIManager>("UIManager");
+        UserInterface.HideAll();
+        UserInterface.MainMenu.CallDeferred("show");
+
         CurrentPlayer = GetNode<Player>("%Player");
         CurrentPlayer.Hide();
+
+        LoadSettings();
 
         _enemyTurns = new Queue<Enemy>();
         _enemyMove = new Timeout(.1f);
         _playerMove = new Timeout(.1f);
         IsPaused = true;
+
     }
 
     public override void _Process(float delta)
     {
         if (Input.IsActionJustPressed("debug"))
         {
-            GetNode<DebugUI>("DebugUI").ShowLevelSelect();
+            UserInterface.Debug.ShowLevelSelect();
         }
 
         if (Input.IsActionJustPressed("pause_game"))
@@ -60,13 +63,13 @@ public class Main : Node
             if (IsPaused)
             {
                 IsPaused = false;
-                _paused.GetChild<Control>(0).Hide();
+                UserInterface.Paused.Hide();
             }
             else
             {
                 IsPaused = true;
-                _paused.GetChild<Control>(0).Show();
-                _paused.GetChild<Control>(0).GetNode<Label>("YouDied").Hide();
+                UserInterface.Paused.Show();
+                UserInterface.Paused.GetChild<Control>(0).GetNode<Label>("YouDied").Hide();
             }
         }
 
@@ -106,13 +109,16 @@ public class Main : Node
     /// </summary>
     private void LoadMap(string map)
     {
-        UnloadCurrentMap();
+        if (ResourceLoader.Exists($"res://Maps/{_worldPrefix}{map}.tscn"))
+        {
+            UnloadCurrentMap();
 
-        Node scene = ResourceLoader.Load<PackedScene>($"res://Maps/{_worldPrefix}{map}.tscn").Instance();
-        _loadedScene = scene;
-        _loadedScene.Connect(nameof(Level.LevelLoaded), this, "OnLevelLoaded");
+            Node scene = ResourceLoader.Load<PackedScene>($"res://Maps/{_worldPrefix}{map}.tscn").Instance();
+            _loadedScene = scene;
+            _loadedScene.Connect(nameof(Level.LevelLoaded), this, "OnLevelLoaded");
 
-        GetNode("GameContainer").GetNode("GameCam").CallDeferred("add_child", scene);
+            GetNode("GameContainer").GetNode("GameCam").CallDeferred("add_child", scene);
+        }
     }
 
     private void UnloadCurrentMap()
@@ -159,7 +165,7 @@ public class Main : Node
 
     private void LoadSettings()
     {
-        var settings = GetNode<SettingsUI>("Settings").CurrentSettings;
+        var settings = UserInterface.Settings.CurrentSettings;
 
         // Update video settings
         OS.WindowMaximized = settings.Window == Settings.WindowType.Maximized;
@@ -185,28 +191,10 @@ public class Main : Node
     {
         RestartGame();
     }
-    private void OnMainMenuSettingsButtonPressed()
-    {
-        GetNode<SettingsUI>("Settings").GetChild<Control>(0).Show();
-    }
 
-    private void OnDebugLoadLevelPressed(string level)
+    private void OnLoadLevel(string level)
     {
-        switch (level.ToLower())
-        {
-            case "genji":
-                _player.Heal(_player.MaxHealth);
-                break;
-            case "thisisfine":
-                foreach (var light in GetTree().GetNodesInGroup("lights").Cast<Light2D>()) { light.Enabled = true; }
-                break;
-            case "lightsout":
-                _player.GetNode<CanvasModulate>("CanvasModulate").Visible = !_player.GetNode<CanvasModulate>("CanvasModulate").Visible;
-                break;
-            default:
-                LoadMap(level);
-                break;
-        }
+        LoadMap(level);
     }
 
     private void OnPausedRetryPressed()
@@ -221,12 +209,10 @@ public class Main : Node
 
     private void RestartGame()
     {
-        GetNode<PausedUI>("Paused").GetChild<Control>(0).Hide();
-        GetNode<MainMenu>("MainMenu").GetChild<Control>(0).Hide();
-        GetNode<HUD>("HUD").GetChild<Control>(0).Show();
-
         CurrentPlayer.Reset();
         CurrentPlayer.Show();
+
+        UserInterface.HUD.UpdateHUD(CurrentPlayer);
 
         LoadMap("Level1");
         IsPaused = false;
@@ -256,9 +242,9 @@ public class Main : Node
     /// </summary>
     private void OnPlayerDied()
     {
-        _paused.GetChild<Control>(0).Show();
-        _paused.GetChild<Control>(0).GetNode<Label>("YouDied").Show();
-        _paused.UpdateDeathStats(CurrentPlayer);
+        UserInterface.Paused.Show();
+        UserInterface.Paused.GetNode<Label>("Control/YouDied").Show();
+        UserInterface.Paused.UpdateDeathStats(CurrentPlayer);
         IsPaused = true;
     }
 
@@ -267,8 +253,7 @@ public class Main : Node
     /// </summary>
     private void OnItemPickedUp(Pickup item)
     {
-        HUD hud = GetNode<HUD>("/root/Main/HUD");
-        hud.UpdateHUD(CurrentPlayer);
+        UserInterface.HUD.UpdateHUD(CurrentPlayer);
     }
 
     /// <summary>

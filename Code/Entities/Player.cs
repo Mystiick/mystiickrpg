@@ -9,9 +9,13 @@ public class Player : Entity
     [Export] public AudioStream[] Footsteps;
     [Export] public AudioStream DeathSound;
 
+    private Main _main;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        _main = GetNode<Main>("/root/Main");
+
         Reset();
     }
 
@@ -35,7 +39,7 @@ public class Player : Entity
     public void Damage(int amount)
     {
         Health -= amount;
-        GetNode<HUD>("/root/Main/HUD").UpdateHealth(Health, MaxHealth);
+        _main.UserInterface.HUD.UpdateHealth(Health, MaxHealth);
 
         if (Health <= 0)
         {
@@ -52,7 +56,7 @@ public class Player : Entity
     public override void Heal(int amount)
     {
         base.Heal(amount);
-        GetNode<HUD>("/root/Main/HUD").UpdateHealth(Health, MaxHealth);
+        _main.UserInterface.HUD.UpdateHealth(Health, MaxHealth);
     }
 
     /// <summary>
@@ -66,12 +70,11 @@ public class Player : Entity
         CanMove = true;
 
         Inventory.Clear();
-        GetNode<HUD>("/root/Main/HUD").UpdateHUD(this);
     }
 
     private void HandleInput()
     {
-        if (CanMove && !GetNode<Main>("/root/Main").IsPaused)
+        if (CanMove && !_main.IsPaused)
         {
             Vector2 direction = Vector2.Zero;
             // Use elses here instead of checking each one individually to make sure only one direction is moved at a time
@@ -145,7 +148,7 @@ public class Player : Entity
                 this.Inventory.UseItem(this.Inventory.First(x => x is Key));
 
                 door.Unlock();
-                GetNode<HUD>("/root/Main/HUD").UpdateHUD(this);
+                _main.UserInterface.HUD.UpdateHUD(this);
                 FinishTurn();
             }
             else if (door.State == Door.DoorState.Closed)
