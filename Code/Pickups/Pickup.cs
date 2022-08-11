@@ -45,7 +45,7 @@ public class Pickup : Area2D
                 return new HealingItem(this, owner, ((Chicken)this).HealingAmount);
 
             case ItemType.Key:
-                return new Key(this, owner);
+                return new Key(this, owner) { Usable = false };
 
             case ItemType.Generic:
                 return new Item(this, owner);

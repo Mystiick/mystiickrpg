@@ -53,21 +53,25 @@ public class Inventory : IEnumerable<Item>
 
         for (int i = 0; i < _items.Length; i++)
         {
-            if (_items[i] == item)
+            if (_items[i] == item && item.Usable)
             {
-                _items[i].Use();
-                _items[i] = null;
+                // Try to use the item, and remove it from the inventory if successful
+                if (_items[i].Use())
+                    _items[i] = null;
             }
         }
     }
 
     /// <summary>
-    /// Use the specified item by index
+    /// Removes the specified item from the inventory without using it
     /// </summary>
-    public void UseItem(int index)
+    public void Remove(Item item)
     {
-        _items[index].Use();
-        _items[index] = null;
+        for (int i = 0; i < _items.Length; i++)
+        {
+            if (_items[i] == item)
+                _items[i] = null;
+        }
     }
 
     /// <summary>

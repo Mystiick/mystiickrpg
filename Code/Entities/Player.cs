@@ -145,7 +145,7 @@ public class Player : Entity
         {
             if (door.State == Door.DoorState.Locked && this.Inventory.Any(x => x is Key))
             {
-                this.Inventory.UseItem(this.Inventory.First(x => x is Key));
+                this.Inventory.Remove(this.Inventory.First(x => x is Key));
 
                 door.Unlock();
                 _main.UserInterface.HUD.UpdateHUD(this);

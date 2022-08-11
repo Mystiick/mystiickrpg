@@ -8,7 +8,7 @@ public class ItemButton : TextureButton
 
     public void OnItemPressed()
     {
-        if (Item != null)
+        if (Item != null && Item.Usable)
         {
             Inventory.UseItem(Item);
             EmitSignal(nameof(ItemUsed));

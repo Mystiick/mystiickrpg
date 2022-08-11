@@ -2,10 +2,10 @@ using Godot;
 
 public class Item
 {
-    public Texture Texture { get; }
-    public string Tooltip { get; }
+    public Texture Texture { get; set; }
+    public string Tooltip { get; set; }
     public Entity Owner { get; set; }
-    public bool Usable { get; set; }
+    public bool Usable { get; set; } = true;
 
     public Item()
     {
@@ -18,8 +18,5 @@ public class Item
         Owner = owner;
     }
 
-    public virtual void Use()
-    {
-
-    }
+    public virtual bool Use() => true;
 }

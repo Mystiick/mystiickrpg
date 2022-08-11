@@ -9,9 +9,13 @@ public class HealingItem : Item
         HealingAmount = healingAmount;
     }
 
-    public override void Use()
+    public override bool Use()
     {
+        // Don't use the item if the owner is at full health
+        if (Owner.Health >= Owner.MaxHealth)
+            return false;
+
         Owner.Heal(HealingAmount);
-        base.Use();
+        return true;
     }
 }

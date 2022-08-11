@@ -21,18 +21,20 @@ public class DebugUI : CanvasLayer
             case "genji":
                 player.Heal(player.MaxHealth);
                 break;
+
             case "thisisfine":
                 foreach (var light in GetTree().GetNodesInGroup("lights").Cast<Light2D>()) { light.Enabled = true; }
                 break;
+
             case "lightsout":
                 player.GetNode<CanvasModulate>("CanvasModulate").Visible = !player.GetNode<CanvasModulate>("CanvasModulate").Visible;
                 break;
-            default:
 
+            default:
+                EmitSignal(nameof(LoadLevelPressed), input);
                 break;
         }
 
-        EmitSignal(nameof(LoadLevelPressed), input);
     }
     private void OnLoadLevelCancelPressed()
     {
