@@ -65,6 +65,14 @@ public class HUD : CanvasLayer
                 btn.HintTooltip = string.Empty;
             }
         }
+
+        if (p.Equipment.Head != null)
+        {
+            ItemButton btn = GetNode<ItemButton>("Base/InventoryAndPaperdoll/Paperdoll/Head");
+            btn.Item = p.Equipment.Head;
+            btn.TextureNormal = p.Equipment.Head.Texture;
+            btn.HintTooltip = p.Equipment.Head.Tooltip;
+        }
     }
 
     /// <summary>

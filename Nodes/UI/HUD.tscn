@@ -139,3 +139,65 @@ margin_left = 33.0
 margin_top = 49.0
 margin_right = 45.0
 margin_bottom = 61.0
+
+[node name="Paperdoll" type="Control" parent="Base/InventoryAndPaperdoll"]
+margin_left = 8.0
+margin_top = 7.0
+margin_right = 56.0
+margin_bottom = 71.0
+
+[node name="Head" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
+margin_left = 18.0
+margin_top = 2.0
+margin_right = 30.0
+margin_bottom = 14.0
+focus_mode = 2
+
+[node name="Chest" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
+margin_left = 18.0
+margin_top = 18.0
+margin_right = 30.0
+margin_bottom = 30.0
+focus_mode = 2
+
+[node name="Legs" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
+margin_left = 18.0
+margin_top = 34.0
+margin_right = 30.0
+margin_bottom = 46.0
+focus_mode = 2
+
+[node name="Boots" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
+margin_left = 18.0
+margin_top = 50.0
+margin_right = 30.0
+margin_bottom = 62.0
+focus_mode = 2
+
+[node name="Shoulders" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
+margin_left = 2.0
+margin_top = 18.0
+margin_right = 14.0
+margin_bottom = 30.0
+focus_mode = 2
+
+[node name="Amulet" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
+margin_left = 34.0
+margin_top = 18.0
+margin_right = 46.0
+margin_bottom = 30.0
+focus_mode = 2
+
+[node name="LeftHand" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
+margin_left = 2.0
+margin_top = 34.0
+margin_right = 14.0
+margin_bottom = 46.0
+focus_mode = 2
+
+[node name="RightHand" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
+margin_left = 34.0
+margin_top = 34.0
+margin_right = 46.0
+margin_bottom = 46.0
+focus_mode = 2

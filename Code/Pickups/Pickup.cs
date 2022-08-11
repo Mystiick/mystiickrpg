@@ -30,35 +30,10 @@ public class Pickup : Area2D
             audio.Play();
 
             Sprite s = GetNode<Sprite>("Sprite");
-            player.Inventory.Add(BuildItemByType(Type, s.Texture, $"{ItemName}\n{Tooltip}", player));
+            player.Inventory.Add(ItemFactory.BuildItemByType(Type, s.Texture, $"{ItemName}\n{Tooltip}", this, player));
 
             QueueFree();
             EmitSignal(nameof(ItemPickedUp), this);
         }
-    }
-
-    private Item BuildItemByType(ItemType type, Texture texture, string tooltip, Entity owner)
-    {
-        switch (type)
-        {
-            case ItemType.Chicken:
-                return new HealingItem(this, owner, ((Chicken)this).HealingAmount);
-
-            case ItemType.Key:
-                return new Key(this, owner) { Usable = false };
-
-            case ItemType.Generic:
-                return new Item(this, owner);
-
-            default:
-                throw new NotImplementedException($"ItemType of {type} is not yet implemented");
-        }
-    }
-
-    public enum ItemType
-    {
-        Generic,
-        Chicken,
-        Key
     }
 }

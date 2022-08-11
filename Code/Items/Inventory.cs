@@ -55,9 +55,15 @@ public class Inventory : IEnumerable<Item>
         {
             if (_items[i] == item && item.Usable)
             {
-                // Try to use the item, and remove it from the inventory if successful
-                if (_items[i].Use())
+                if (item is Equipable)
+                {
+                    _items[i] = item.Owner.Equipment.EquipItem((Equipable)item);
+                }
+                else if (_items[i].Use())
+                {
+                    // Try to use the item, and remove it from the inventory if successful
                     _items[i] = null;
+                }
             }
         }
     }
