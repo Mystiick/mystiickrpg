@@ -66,12 +66,9 @@ public class HUD : CanvasLayer
             }
         }
 
-        if (p.Equipment.Head != null)
+        foreach (var eq in p.Equipment.Items)
         {
-            ItemButton btn = GetNode<ItemButton>("Base/InventoryAndPaperdoll/Paperdoll/Head");
-            btn.Item = p.Equipment.Head;
-            btn.TextureNormal = p.Equipment.Head.Texture;
-            btn.HintTooltip = p.Equipment.Head.Tooltip;
+            EquipItem(eq.Value, $"Base/InventoryAndPaperdoll/Paperdoll/{eq.Key}");
         }
     }
 
@@ -81,5 +78,23 @@ public class HUD : CanvasLayer
     public void OnInventoryItemUsed()
     {
         UpdateInventory(GetNode<Main>("/root/Main").CurrentPlayer);
+    }
+
+    private void EquipItem(Equipable item, string nodePath)
+    {
+        ItemButton btn = GetNode<ItemButton>(nodePath);
+
+        if (item != null)
+        {
+            btn.Item = item;
+            btn.TextureNormal = item.Texture;
+            btn.HintTooltip = item.Tooltip;
+        }
+        else
+        {
+            btn.Item = null;
+            btn.TextureNormal = null;
+            btn.HintTooltip = string.Empty;
+        }
     }
 }

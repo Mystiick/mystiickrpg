@@ -51,7 +51,36 @@ public class DebugUI : CanvasLayer
                 });
                 GetNode<Main>("/root/Main").UserInterface.HUD.UpdateHUD(player);
                 break;
+            case "equipme":
+                var texts = new Texture[] {
+                    ResourceLoader.Load<Texture>("res://Assets/bloodstain.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/bloodstain2.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/bones.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/chicken.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/crab.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/door_closed.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/door_locked.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/door_open.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/key.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/player.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/skele.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/stairs_down.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/stairs_up.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/torch.png"),
+                    ResourceLoader.Load<Texture>("res://Assets/zombie.png")
+                };
 
+                player.Inventory.Add(new Equipable() { Owner = player, Tooltip = "DEBUG HEAD", Texture = texts.Random(), Slot = Equipable.SlotType.Head });
+                player.Inventory.Add(new Equipable() { Owner = player, Tooltip = "DEBUG SHOULDERS", Texture = texts.Random(), Slot = Equipable.SlotType.Shoulders });
+                player.Inventory.Add(new Equipable() { Owner = player, Tooltip = "DEBUG KNEES", Texture = texts.Random(), Slot = Equipable.SlotType.Legs });
+                player.Inventory.Add(new Equipable() { Owner = player, Tooltip = "DEBUG AND TOES", Texture = texts.Random(), Slot = Equipable.SlotType.Boots });
+                player.Inventory.Add(new Equipable() { Owner = player, Tooltip = "DEBUG Chest", Texture = texts.Random(), Slot = Equipable.SlotType.Chest });
+                player.Inventory.Add(new Equipable() { Owner = player, Tooltip = "DEBUG Amulet", Texture = texts.Random(), Slot = Equipable.SlotType.Amulet });
+                player.Inventory.Add(new Equipable() { Owner = player, Tooltip = "DEBUG LeftHand", Texture = texts.Random(), Slot = Equipable.SlotType.LeftHand });
+                player.Inventory.Add(new Equipable() { Owner = player, Tooltip = "DEBUG RightHand", Texture = texts.Random(), Slot = Equipable.SlotType.RightHand });
+
+                GetNode<Main>("/root/Main").UserInterface.HUD.UpdateHUD(player);
+                break;
             default:
                 EmitSignal(nameof(LoadLevelPressed), input);
                 break;
