@@ -1,8 +1,12 @@
 using Godot;
 using System;
 
+using Newtonsoft.Json;
+
 public static class ItemFactory
 {
+    private static Item[] _allItems { get; set; }
+
     public static Item BuildItemByType(ItemType type, Texture texture, string tooltip, Pickup source, Entity owner)
     {
         switch (type)
@@ -21,7 +25,23 @@ public static class ItemFactory
         }
     }
 
+    public static void LoadItemsFromFile()
+    {
+        var items = new File();
+        items.Open("res://Data/items.json", File.ModeFlags.Read);
+
+        _allItems = JsonConvert.DeserializeObject<Item[]>(items.GetAsText());
+    }
+
+    public static Item GetItemByID(int id)
+    {
+        var output = _allItems[id].Clone();
+        output.Texture = ResourceLoader.Load<Texture>(output.TexturePath);
+
+        return output;
+    }
 }
+
 
 public enum ItemType
 {

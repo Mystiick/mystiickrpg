@@ -33,6 +33,8 @@ public class Main : Node
     /// </summary>
     public override void _Ready()
     {
+        ItemFactory.LoadItemsFromFile();
+
         _worldPrefix = "StarterDungeon/";
 
         UserInterface = GetNode<UIManager>("UIManager");
@@ -48,7 +50,6 @@ public class Main : Node
         _enemyMove = new Timeout(.1f);
         _playerMove = new Timeout(.1f);
         IsPaused = true;
-
     }
 
     public override void _Process(float delta)

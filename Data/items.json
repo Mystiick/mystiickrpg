@@ -1,0 +1,22 @@
+[
+    {
+        "id": 0,
+        "name": "Zero",
+        "tooltip": "This is not an item",
+        "texturePath": "res://Assets/bloodstain.png",
+        "usable": true
+    },
+    {
+        "id": 1,
+        "name": "Starter Amulet",
+        "tooltip": "This is loaded from json",
+        "texturePath": "res://Assets/Items/starter_amulet.png",
+        "usable": true,
+        "modifiers": [
+            {
+                "type": "Health",
+                "value": 1
+            }
+        ]
+    }
+]
