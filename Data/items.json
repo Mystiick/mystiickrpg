@@ -121,5 +121,21 @@
                 "value": 1
             }
         ]
+    },
+    {
+        "id": 9,
+        "type": "Key",
+        "name": "Dungeon Key",
+        "tooltip": "Unlocks dungeon doors.",
+        "texturePath": "res://Assets/key.png",
+        "usable": false
+    },
+    {
+        "id": 10,
+        "type": "Healing",
+        "name": "Floor Chicken",
+        "tooltip": "Heals 6 health. Tastes more like chicken than floor.\n(Click to use)",
+        "texturePath": "res://Assets/chicken.png",
+        "healingAmount": 6
     }
 ]

@@ -69,38 +69,3 @@ public class Item
         return output.ToString();
     }
 }
-
-public class SerializedItem : Item
-{
-    public string Type { get; set; }
-    // Equipable properties
-    public Equipable.SlotType Slot;
-
-    // HealintItem properties
-    public int HealingAmount;
-
-    public T ToItem<T>() where T : Item
-    {
-        return (T)(object)ToItem();
-    }
-
-    public Item ToItem()
-    {
-        switch (Type?.ToLower())
-        {
-            case "equipable":
-                return new Equipable()
-                {
-                    Slot = this.Slot,
-                    TexturePath = this.TexturePath,
-                    Modifiers = this.Modifiers,
-                    Texture = this.Texture,
-                    Name = this.Name,
-                    Tooltip = this.Tooltip,
-                    Usable = this.Usable
-                };
-        }
-
-        return this.Clone();
-    }
-}

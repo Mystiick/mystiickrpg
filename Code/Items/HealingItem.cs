@@ -4,6 +4,7 @@ public class HealingItem : Item
 {
     public int HealingAmount;
 
+    public HealingItem() { }
     public HealingItem(Pickup source, Entity owner, int healingAmount) : base(source, owner)
     {
         HealingAmount = healingAmount;
@@ -17,5 +18,12 @@ public class HealingItem : Item
 
         Owner.Heal(HealingAmount);
         return true;
+    }
+
+    public override Item Clone()
+    {
+        var output = base.CloneAs<HealingItem>();
+        output.HealingAmount = this.HealingAmount;
+        return output;
     }
 }
