@@ -8,10 +8,11 @@
     },
     {
         "id": 1,
+        "type": "Equipable",
+        "slot": "Amulet",
         "name": "Starter Amulet",
         "tooltip": "This is loaded from json",
         "texturePath": "res://Assets/Items/starter_amulet.png",
-        "usable": true,
         "modifiers": [
             {
                 "type": "Health",

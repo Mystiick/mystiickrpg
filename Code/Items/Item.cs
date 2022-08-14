@@ -31,7 +31,53 @@ public class Item
             Texture = this.Texture,
             Tooltip = this.Tooltip,
             Usable = this.Usable,
-            Modifiers = this.Modifiers.Select(x => x.Clone()).ToArray()
+            Modifiers = this.Modifiers?.Select(x => x.Clone()).ToArray()
         };
+    }
+
+    protected T CloneAs<T>() where T : Item, new()
+    {
+        return new T()
+        {
+            TexturePath = this.TexturePath,
+            Texture = this.Texture,
+            Tooltip = this.Tooltip,
+            Usable = this.Usable,
+            Modifiers = this.Modifiers?.Select(x => x.Clone()).ToArray()
+        };
+    }
+}
+
+public class SerializedItem : Item
+{
+    public string Type { get; set; }
+    // Equipable properties
+    public Equipable.SlotType Slot;
+
+    // HealintItem properties
+    public int HealingAmount;
+
+    public T ToItem<T>() where T : Item
+    {
+        return (T)(object)ToItem();
+    }
+
+    public Item ToItem()
+    {
+        switch (Type?.ToLower())
+        {
+            case "equipable":
+                return new Equipable()
+                {
+                    Slot = this.Slot,
+                    TexturePath = this.TexturePath,
+                    Modifiers = this.Modifiers,
+                    Texture = this.Texture,
+                    Tooltip = this.Tooltip,
+                    Usable = this.Usable
+                };
+        }
+
+        return this.Clone();
     }
 }

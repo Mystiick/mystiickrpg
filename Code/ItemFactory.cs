@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 using Newtonsoft.Json;
 
@@ -30,7 +31,7 @@ public static class ItemFactory
         var items = new File();
         items.Open("res://Data/items.json", File.ModeFlags.Read);
 
-        _allItems = JsonConvert.DeserializeObject<Item[]>(items.GetAsText());
+        _allItems = JsonConvert.DeserializeObject<SerializedItem[]>(items.GetAsText()).Select(x => x.ToItem()).ToArray();
     }
 
     public static Item GetItemByID(int id)

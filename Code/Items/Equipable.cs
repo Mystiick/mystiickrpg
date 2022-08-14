@@ -2,6 +2,14 @@ public class Equipable : Item
 {
     public SlotType Slot;
 
+    public override Item Clone()
+    {
+        Equipable output = base.CloneAs<Equipable>();
+        output.Slot = this.Slot;
+
+        return output;
+    }
+
 
     public enum SlotType
     {
