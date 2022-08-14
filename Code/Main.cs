@@ -33,6 +33,7 @@ public class Main : Node
     /// </summary>
     public override void _Ready()
     {
+        base._Ready();
         ItemFactory.LoadItemsFromFile();
 
         _worldPrefix = "StarterDungeon/";

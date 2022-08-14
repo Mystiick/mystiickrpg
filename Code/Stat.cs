@@ -5,7 +5,7 @@ public class Stat
 
     public enum StatType
     {
-        Defence,
+        Defense,
         Attack,
         Health
     }

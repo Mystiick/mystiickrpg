@@ -25,6 +25,8 @@ public class SettingsUI : CanvasLayer
 
     public override void _Ready()
     {
+        base._Ready();
+
         // Save off a reference of all the controls
         _windowType = GetNode<OptionButton>("%WindowType");
         _maxFps = GetNode<SpinBox>("%MaxFps");

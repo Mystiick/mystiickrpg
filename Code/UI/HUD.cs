@@ -16,7 +16,7 @@ public class HUD : CanvasLayer
         _inventoryButtons = new ItemButton[player.Inventory.Size];
         for (int i = 0; i < player.Inventory.Size; i++)
         {
-            _inventoryButtons[i] = (GetNode<ItemButton>($"Base/InventoryAndPaperdoll/Inventory/{i}"));
+            _inventoryButtons[i] = GetNode<ItemButton>($"Base/InventoryAndPaperdoll/Inventory/{i}");
             _inventoryButtons[i].Inventory = player.Inventory;
             _inventoryButtons[i].Connect(nameof(ItemButton.ItemUsed), this, nameof(OnInventoryItemUsed));
         }
@@ -56,7 +56,7 @@ public class HUD : CanvasLayer
             {
                 btn.Item = item;
                 btn.TextureNormal = item.Texture;
-                btn.HintTooltip = item.Tooltip;
+                btn.HintTooltip = item.BuildTooltip();
             }
             else
             {
@@ -88,7 +88,7 @@ public class HUD : CanvasLayer
         {
             btn.Item = item;
             btn.TextureNormal = item.Texture;
-            btn.HintTooltip = item.Tooltip;
+            btn.HintTooltip = item.BuildTooltip();
         }
         else
         {

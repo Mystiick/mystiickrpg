@@ -16,6 +16,7 @@ public class Enemy : Entity
 
     public override void _Ready()
     {
+        base._Ready();
         player = GetTree().Root.GetNode<Main>("/root/Main/")?.CurrentPlayer;
     }
 

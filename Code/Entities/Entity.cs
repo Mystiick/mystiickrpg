@@ -10,6 +10,12 @@ public class Entity : KinematicBody2D
     [Export] public int Attack { get; protected set; }
     public bool CanMove { get; set; }
 
+    public override void _Ready()
+    {
+        base._Ready();
+        Inventory.Owner = this;
+    }
+
     public virtual void Heal(int amount)
     {
         Health = Mathf.Clamp(Health + amount, 0, MaxHealth);

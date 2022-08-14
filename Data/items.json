@@ -19,5 +19,107 @@
                 "value": 1
             }
         ]
+    },
+    {
+        "id": 2,
+        "type": "equipable",
+        "slot": "Head",
+        "name": "Starter Helm",
+        "tooltip": "This is loaded from json",
+        "texturePath": "res://Assets/Items/starter_helm.png",
+        "modifiers": [
+            {
+                "type": "Defense",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "type": "equipable",
+        "slot": "Chest",
+        "name": "Starter Chest",
+        "tooltip": "This is loaded from json",
+        "texturePath": "res://Assets/Items/starter_chest.png",
+        "modifiers": [
+            {
+                "type": "Defense",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "type": "equipable",
+        "slot": "Legs",
+        "name": "Starter Pants",
+        "tooltip": "This is loaded from json",
+        "texturePath": "res://Assets/Items/starter_pants.png",
+        "modifiers": [
+            {
+                "type": "Defense",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "type": "equipable",
+        "slot": "Boots",
+        "name": "Starter Boots",
+        "tooltip": "This is loaded from json",
+        "texturePath": "res://Assets/Items/starter_boots.png",
+        "modifiers": [
+            {
+                "type": "Health",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "type": "equipable",
+        "slot": "Shoulders",
+        "name": "Starter Shoulders",
+        "tooltip": "This is loaded from json",
+        "texturePath": "res://Assets/Items/starter_shoulders.png",
+        "modifiers": [
+            {
+                "type": "Health",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "type": "equipable",
+        "slot": "RightHand",
+        "name": "Starter Sword",
+        "tooltip": "This is loaded from json",
+        "texturePath": "res://Assets/Items/starter_sword.png",
+        "modifiers": [
+            {
+                "type": "Attack",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "type": "equipable",
+        "slot": "LeftHand",
+        "name": "Starter Shield",
+        "tooltip": "This is loaded from json",
+        "texturePath": "res://Assets/Items/starter_shield.png",
+        "modifiers": [
+            {
+                "type": "Defense",
+                "value": 2
+            },
+            {
+                "type": "Health",
+                "value": 1
+            }
+        ]
     }
 ]

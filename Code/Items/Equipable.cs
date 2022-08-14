@@ -1,6 +1,6 @@
 public class Equipable : Item
 {
-    public SlotType Slot;
+    public SlotType Slot { get; set; }
 
     public override Item Clone()
     {
@@ -9,7 +9,6 @@ public class Equipable : Item
 
         return output;
     }
-
 
     public enum SlotType
     {

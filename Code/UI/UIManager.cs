@@ -20,6 +20,8 @@ public class UIManager : Control
 
     public override void _Ready()
     {
+        base._Ready();
+
         HUD = GetNode<HUD>("HUD");
         Debug = GetNode<DebugUI>("DebugUI");
         MainMenu = GetNode<MainMenu>("MainMenu");

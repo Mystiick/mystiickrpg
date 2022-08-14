@@ -6,9 +6,10 @@ using System.Collections.Generic;
 public class Inventory : IEnumerable<Item>
 {
     public int Size { get; private set; }
+    public Entity Owner { get; set; }
     private Item[] _items;
 
-
+    // Constructors
     public Inventory() : this(12) { }
     public Inventory(int size)
     {
@@ -31,6 +32,8 @@ public class Inventory : IEnumerable<Item>
     {
         if (!HasSpace())
             throw new OverflowException("Cannot add an item to the inventory if it is full. Check before adding an item and handle properly if the inventory is full.");
+
+        item.Owner = this.Owner;
 
         for (int i = 0; i < _items.Length; i++)
         {
