@@ -1,0 +1,22 @@
+[
+    {
+        "name": "basic_dungeon",
+        "drops": [
+            {
+                "dropChance": 2
+            },
+            {
+                "itemID": 2,
+                "dropChance": 1,
+                "minAmount": 1,
+                "maxAmount": 1
+            },
+            {
+                "itemID": 3,
+                "dropChance": 1,
+                "minAmount": 1,
+                "maxAmount": 1
+            }
+        ]
+    }
+]

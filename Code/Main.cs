@@ -15,7 +15,6 @@ public class Main : Node
     private Timeout _playerMove;
     private Player _player;
 
-
     public Player CurrentPlayer
     {
         get
@@ -34,7 +33,10 @@ public class Main : Node
     public override void _Ready()
     {
         base._Ready();
+
+        // Read json files and prepopulate ItemFactory data
         ItemFactory.LoadItemsFromFile();
+        ItemFactory.LoadLootTablesFromFile();
 
         _worldPrefix = "StarterDungeon/";
 
@@ -182,32 +184,18 @@ public class Main : Node
         foreach (AudioStreamPlayer a in GetTree().GetNodesInGroup("sound_effects"))
             a.VolumeDb = GD.Linear2Db(settings.SoundEffectsVolume * settings.MasterVolume);
 
-        // Start the background noise if it's not already running
+        // Start the background noise if it's not already running.
+        // It is not running by default to prevent it from playing a loud sound on startup when the user has turned it down before
         if (!GetNode<AudioStreamPlayer>("BackgroundNoise").Playing)
             GetNode<AudioStreamPlayer>("BackgroundNoise").Play();
     }
 
     #region | UI Events |
 
-    private void OnMainMenuStartButtonPressed()
-    {
-        RestartGame();
-    }
-
-    private void OnLoadLevel(string level)
-    {
-        LoadMap(level);
-    }
-
-    private void OnPausedRetryPressed()
-    {
-        RestartGame();
-    }
-
-    private void OnSettingsUpdated()
-    {
-        LoadSettings();
-    }
+    private void OnMainMenuStartButtonPressed() => RestartGame();
+    private void OnLoadLevel(string level) => LoadMap(level);
+    private void OnPausedRetryPressed() => RestartGame();
+    private void OnSettingsUpdated() => LoadSettings();
 
     private void RestartGame()
     {
@@ -268,11 +256,7 @@ public class Main : Node
 
     private void OnEnemyKilled(Enemy enemy)
     {
-        // Place a randomized bloodstain on the ground and put it in the Environment layer
-        var stain = new Sprite();
-        stain.Texture = enemy.Bloodstains.Random();
-        stain.Position = enemy.Position + new Vector2(4, 4);
-        _loadedScene.GetNode<Node>("Environment").AddChild(stain);
+        // TODO: Add counter
     }
 
     #endregion

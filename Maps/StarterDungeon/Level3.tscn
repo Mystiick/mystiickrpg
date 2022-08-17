@@ -20,6 +20,7 @@ script = ExtResource( 2 )
 position = Vector2( 40, 16 )
 
 [node name="Environment" type="Node" parent="."]
+unique_name_in_owner = true
 
 [node name="Stairs" parent="Environment" instance=ExtResource( 1 )]
 position = Vector2( 168, 224 )
@@ -90,6 +91,7 @@ position = Vector2( 32, 144 )
 position = Vector2( 64, 208 )
 
 [node name="Pickups" type="Node" parent="."]
+unique_name_in_owner = true
 
 [node name="Chicken" parent="Pickups" instance=ExtResource( 7 )]
 position = Vector2( 144, 24 )

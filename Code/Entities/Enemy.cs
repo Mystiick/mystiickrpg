@@ -52,6 +52,9 @@ public class Enemy : Entity
         {
             EmitSignal(nameof(EnemyKilled), this);
             QueueFree();
+
+            DropStain();
+            DropItem();
         }
     }
 
@@ -158,6 +161,40 @@ public class Enemy : Entity
         direction *= TileScale;
 
         return direction;
+    }
+
+    private void DropStain()
+    {
+        // Place a randomized bloodstain on the ground and put it in the Environment layer
+        var stain = new Sprite();
+        stain.Texture = Bloodstains.Random();
+        stain.Position = Position + new Vector2(4, 4);
+
+        GetNode("%Environment").AddChild(stain);
+    }
+
+    private void DropItem()
+    {
+        if (!string.IsNullOrWhiteSpace(LootTable))
+        {
+            var drop = ItemFactory.GetTableByName(LootTable).GetDrop();
+
+            if (drop != null)
+            {
+                var pickup = new Pickup()
+                {
+                    ItemName = drop.Name,
+                    Tooltip = drop.Tooltip,
+                    Position = this.Position
+                };
+                var sprite = new Sprite() { Texture = drop.Texture, Position = new Vector2(4, 4) };
+
+                pickup.AddChild(sprite);
+                GetNode("%Pickups").AddChild(pickup);
+
+                GD.Print(drop.Name);
+            }
+        }
     }
 
     enum EnemyType

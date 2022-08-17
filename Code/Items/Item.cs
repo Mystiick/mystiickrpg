@@ -4,6 +4,7 @@ using System.Text;
 
 public class Item
 {
+    public int ID { get; set; }
     public string TexturePath { get; set; }
     public Texture Texture { get; set; }
     public string Name { get; set; }
@@ -29,6 +30,7 @@ public class Item
     {
         return new Item()
         {
+            ID = this.ID,
             TexturePath = this.TexturePath,
             Texture = this.Texture,
             Name = this.Name,
@@ -41,6 +43,7 @@ public class Item
     {
         return new T()
         {
+            ID = this.ID,
             TexturePath = this.TexturePath,
             Texture = this.Texture,
             Name = this.Name,
