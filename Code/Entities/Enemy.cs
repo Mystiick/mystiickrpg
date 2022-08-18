@@ -16,6 +16,7 @@ public class Enemy : Entity
 
     public override void _Ready()
     {
+        base._Ready();
         player = GetTree().Root.GetNode<Main>("/root/Main/")?.CurrentPlayer;
     }
 
@@ -51,6 +52,9 @@ public class Enemy : Entity
         {
             EmitSignal(nameof(EnemyKilled), this);
             QueueFree();
+
+            DropStain();
+            DropItem();
         }
     }
 
@@ -157,6 +161,29 @@ public class Enemy : Entity
         direction *= TileScale;
 
         return direction;
+    }
+
+    private void DropStain()
+    {
+        // Place a randomized bloodstain on the ground and put it in the Environment layer
+        var stain = new Sprite();
+        stain.Texture = Bloodstains.Random();
+        stain.Position = Position + new Vector2(4, 4);
+
+        GetNode("%Environment").AddChild(stain);
+    }
+
+    private void DropItem()
+    {
+        if (!string.IsNullOrWhiteSpace(LootTable))
+        {
+            var drop = ItemFactory.GetTableByName(LootTable).GetDrop();
+
+            if (drop != null)
+            {
+                GetNode<Main>("/root/Main").DropItem(drop, this.Position);
+            }
+        }
     }
 
     enum EnemyType

@@ -6,9 +6,10 @@ using System.Collections.Generic;
 public class Inventory : IEnumerable<Item>
 {
     public int Size { get; private set; }
+    public Entity Owner { get; set; }
     private Item[] _items;
 
-
+    // Constructors
     public Inventory() : this(12) { }
     public Inventory(int size)
     {
@@ -32,6 +33,8 @@ public class Inventory : IEnumerable<Item>
         if (!HasSpace())
             throw new OverflowException("Cannot add an item to the inventory if it is full. Check before adding an item and handle properly if the inventory is full.");
 
+        item.Owner = this.Owner;
+
         for (int i = 0; i < _items.Length; i++)
         {
             if (_items[i] == null)
@@ -53,21 +56,31 @@ public class Inventory : IEnumerable<Item>
 
         for (int i = 0; i < _items.Length; i++)
         {
-            if (_items[i] == item)
+            if (_items[i] == item && item.Usable)
             {
-                _items[i].Use();
-                _items[i] = null;
+                if (item is Equipable)
+                {
+                    _items[i] = item.Owner.Equipment.EquipItem((Equipable)item);
+                }
+                else if (_items[i].Use())
+                {
+                    // Try to use the item, and remove it from the inventory if successful
+                    _items[i] = null;
+                }
             }
         }
     }
 
     /// <summary>
-    /// Use the specified item by index
+    /// Removes the specified item from the inventory without using it
     /// </summary>
-    public void UseItem(int index)
+    public void Remove(Item item)
     {
-        _items[index].Use();
-        _items[index] = null;
+        for (int i = 0; i < _items.Length; i++)
+        {
+            if (_items[i] == item)
+                _items[i] = null;
+        }
     }
 
     /// <summary>

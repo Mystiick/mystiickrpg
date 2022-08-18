@@ -14,6 +14,7 @@ public class Door : KinematicBody2D
 
     public override void _Ready()
     {
+        base._Ready();
         // Set sprite based on state
         UpdateState(State);
     }

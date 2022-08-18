@@ -16,9 +16,10 @@ public class HUD : CanvasLayer
         _inventoryButtons = new ItemButton[player.Inventory.Size];
         for (int i = 0; i < player.Inventory.Size; i++)
         {
-            _inventoryButtons[i] = (GetNode<ItemButton>($"Base/InventoryAndPaperdoll/Inventory/{i}"));
+            _inventoryButtons[i] = GetNode<ItemButton>($"Base/InventoryAndPaperdoll/Inventory/{i}");
             _inventoryButtons[i].Inventory = player.Inventory;
             _inventoryButtons[i].Connect(nameof(ItemButton.ItemUsed), this, nameof(OnInventoryItemUsed));
+            _inventoryButtons[i].Connect(nameof(ItemButton.ItemDropped), this, nameof(OnInventoryItemDropped));
         }
     }
 
@@ -56,7 +57,7 @@ public class HUD : CanvasLayer
             {
                 btn.Item = item;
                 btn.TextureNormal = item.Texture;
-                btn.HintTooltip = item.Tooltip;
+                btn.HintTooltip = item.BuildTooltip();
             }
             else
             {
@@ -64,6 +65,11 @@ public class HUD : CanvasLayer
                 btn.TextureNormal = null;
                 btn.HintTooltip = string.Empty;
             }
+        }
+
+        foreach (var eq in p.Equipment.Items)
+        {
+            EquipItem(eq.Value, $"Base/InventoryAndPaperdoll/Paperdoll/{eq.Key}");
         }
     }
 
@@ -73,5 +79,31 @@ public class HUD : CanvasLayer
     public void OnInventoryItemUsed()
     {
         UpdateInventory(GetNode<Main>("/root/Main").CurrentPlayer);
+    }
+
+    public void OnInventoryItemDropped(Item item)
+    {
+        var main = GetNode<Main>("/root/Main");
+        main.PlayerDropItem(item);
+
+        UpdateInventory(main.CurrentPlayer);
+    }
+
+    private void EquipItem(Equipable item, string nodePath)
+    {
+        ItemButton btn = GetNode<ItemButton>(nodePath);
+
+        if (item != null)
+        {
+            btn.Item = item;
+            btn.TextureNormal = item.Texture;
+            btn.HintTooltip = item.BuildTooltip();
+        }
+        else
+        {
+            btn.Item = null;
+            btn.TextureNormal = null;
+            btn.HintTooltip = string.Empty;
+        }
     }
 }

@@ -25,6 +25,8 @@ public class SettingsUI : CanvasLayer
 
     public override void _Ready()
     {
+        base._Ready();
+
         // Save off a reference of all the controls
         _windowType = GetNode<OptionButton>("%WindowType");
         _maxFps = GetNode<SpinBox>("%MaxFps");
@@ -44,7 +46,7 @@ public class SettingsUI : CanvasLayer
         SaveSettings();
         EmitSignal(nameof(SettingsUpdated));
 
-        GetNode<Control>("Control").Hide();
+        Hide();
     }
 
     /// <summary>
@@ -63,7 +65,7 @@ public class SettingsUI : CanvasLayer
     public void OnCancelPressed()
     {
         PopulateForm();
-        GetNode<Control>("Control").Hide();
+        Hide();
     }
 
     /// <summary>

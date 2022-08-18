@@ -5,14 +5,15 @@ using System.Linq;
 
 public class Main : Node
 {
+    public bool IsPaused;
+    public UIManager UserInterface;
+
     private Node _loadedScene;
     private string _worldPrefix;
     private Queue<Enemy> _enemyTurns;
     private Timeout _enemyMove;
     private Timeout _playerMove;
     private Player _player;
-    private PausedUI _paused;
-    public bool IsPaused;
 
     public Player CurrentPlayer
     {
@@ -31,16 +32,22 @@ public class Main : Node
     /// </summary>
     public override void _Ready()
     {
-        LoadSettings();
+        base._Ready();
+
+        // Read json files and prepopulate ItemFactory data
+        ItemFactory.LoadItemsFromFile();
+        ItemFactory.LoadLootTablesFromFile();
 
         _worldPrefix = "StarterDungeon/";
-        _paused = GetNode<PausedUI>("Paused");
 
-        _paused.GetChild<Control>(0).Hide();
-        GetNode<HUD>("HUD").GetChild<Control>(0).Hide();
-        GetNode<SettingsUI>("Settings").GetChild<Control>(0).Hide();
+        UserInterface = GetNode<UIManager>("UIManager");
+        UserInterface.HideAll();
+        UserInterface.MainMenu.CallDeferred("show");
+
         CurrentPlayer = GetNode<Player>("%Player");
         CurrentPlayer.Hide();
+
+        LoadSettings();
 
         _enemyTurns = new Queue<Enemy>();
         _enemyMove = new Timeout(.1f);
@@ -52,7 +59,7 @@ public class Main : Node
     {
         if (Input.IsActionJustPressed("debug"))
         {
-            GetNode<DebugUI>("DebugUI").ShowLevelSelect();
+            UserInterface.Debug.ShowLevelSelect();
         }
 
         if (Input.IsActionJustPressed("pause_game"))
@@ -60,17 +67,44 @@ public class Main : Node
             if (IsPaused)
             {
                 IsPaused = false;
-                _paused.GetChild<Control>(0).Hide();
+                UserInterface.Paused.Hide();
             }
             else
             {
                 IsPaused = true;
-                _paused.GetChild<Control>(0).Show();
-                _paused.GetChild<Control>(0).GetNode<Label>("YouDied").Hide();
+                UserInterface.Paused.Show();
+                UserInterface.Paused.GetChild<Control>(0).GetNode<Label>("YouDied").Hide();
             }
         }
 
         HandleTimers(delta);
+    }
+
+    /// <summary>Builds a Pickup, adds it to the current scene, and registers the events for the collider</summary>
+    public void DropItem(Item drop, Vector2 position)
+    {
+        var pickup = ItemFactory.BuildPickup(drop, position);
+        pickup.AddToGroup(NodeGroups.Pickups);
+        _loadedScene.GetNode("%Pickups").AddChild(pickup);
+
+        pickup.Connect(nameof(Pickup.ItemPickedUp), this, nameof(OnItemPickedUp));
+    }
+
+    public void PlayerDropItem(Item item)
+    {
+        Vector2[] nsew = {
+            new Vector2(0,-8), // N
+            new Vector2(0,8),  // S
+            new Vector2(8,0),  // E
+            new Vector2(-8,0), // W
+        };
+
+        var openPositions = nsew.Where(x => _player.MoveAndCollide(x, testOnly: true) == null).ToArray();
+        if (openPositions.Any())
+        {
+            DropItem(item, _player.Position + openPositions.Random());
+            _player.Inventory.Remove(item);
+        }
     }
 
     /// <summary>
@@ -106,13 +140,16 @@ public class Main : Node
     /// </summary>
     private void LoadMap(string map)
     {
-        UnloadCurrentMap();
+        if (ResourceLoader.Exists($"res://Maps/{_worldPrefix}{map}.tscn"))
+        {
+            UnloadCurrentMap();
 
-        Node scene = ResourceLoader.Load<PackedScene>($"res://Maps/{_worldPrefix}{map}.tscn").Instance();
-        _loadedScene = scene;
-        _loadedScene.Connect(nameof(Level.LevelLoaded), this, "OnLevelLoaded");
+            Node scene = ResourceLoader.Load<PackedScene>($"res://Maps/{_worldPrefix}{map}.tscn").Instance();
+            _loadedScene = scene;
+            _loadedScene.Connect(nameof(Level.LevelLoaded), this, "OnLevelLoaded");
 
-        GetNode("GameContainer").GetNode("GameCam").CallDeferred("add_child", scene);
+            GetNode("GameContainer").GetNode("GameCam").CallDeferred("add_child", scene);
+        }
     }
 
     private void UnloadCurrentMap()
@@ -120,9 +157,9 @@ public class Main : Node
         // Free existing objects we're listening to for events
         // If we don't do this, calling `GetNodesInGroup` will get these dying objects during OnLevelLoaded, since they might not have been clenaed up yet
         List<Node> entities = new List<Node>();
-        entities.AddRange(GetTree().GetNodesInGroup("pickups").Cast<Node>());
-        entities.AddRange(GetTree().GetNodesInGroup("stairs").Cast<Node>());
-        entities.AddRange(GetTree().GetNodesInGroup("enemies").Cast<Node>());
+        entities.AddRange(GetTree().GetNodesInGroup(NodeGroups.Pickups).Cast<Node>());
+        entities.AddRange(GetTree().GetNodesInGroup(NodeGroups.Stairs).Cast<Node>());
+        entities.AddRange(GetTree().GetNodesInGroup(NodeGroups.Enemies).Cast<Node>());
 
         foreach (Node s in entities)
         {
@@ -147,19 +184,19 @@ public class Main : Node
         CurrentPlayer.Position = playerSpawn.Position;
 
         // Listen to events for pickups and stairs and enemies
-        Godot.Collections.Array pickups = GetTree().GetNodesInGroup("pickups");
+        Godot.Collections.Array pickups = GetTree().GetNodesInGroup(NodeGroups.Pickups);
         pickups.ConnectAll(nameof(Pickup.ItemPickedUp), this, nameof(OnItemPickedUp));
 
-        Godot.Collections.Array stairs = GetTree().GetNodesInGroup("stairs");
+        Godot.Collections.Array stairs = GetTree().GetNodesInGroup(NodeGroups.Stairs);
         stairs.ConnectAll(nameof(Stairs.StairsEntered), this, nameof(OnStairsEntered));
 
-        Godot.Collections.Array enemies = GetTree().GetNodesInGroup("enemies");
+        Godot.Collections.Array enemies = GetTree().GetNodesInGroup(NodeGroups.Enemies);
         enemies.ConnectAll(nameof(Enemy.EnemyKilled), this, nameof(OnEnemyKilled));
     }
 
     private void LoadSettings()
     {
-        var settings = GetNode<SettingsUI>("Settings").CurrentSettings;
+        var settings = UserInterface.Settings.CurrentSettings;
 
         // Update video settings
         OS.WindowMaximized = settings.Window == Settings.WindowType.Maximized;
@@ -174,59 +211,25 @@ public class Main : Node
         foreach (AudioStreamPlayer a in GetTree().GetNodesInGroup("sound_effects"))
             a.VolumeDb = GD.Linear2Db(settings.SoundEffectsVolume * settings.MasterVolume);
 
-        // Start the background noise if it's not already running
+        // Start the background noise if it's not already running.
+        // It is not running by default to prevent it from playing a loud sound on startup when the user has turned it down before
         if (!GetNode<AudioStreamPlayer>("BackgroundNoise").Playing)
             GetNode<AudioStreamPlayer>("BackgroundNoise").Play();
     }
 
     #region | UI Events |
 
-    private void OnMainMenuStartButtonPressed()
-    {
-        RestartGame();
-    }
-    private void OnMainMenuSettingsButtonPressed()
-    {
-        GetNode<SettingsUI>("Settings").GetChild<Control>(0).Show();
-    }
-
-    private void OnDebugLoadLevelPressed(string level)
-    {
-        switch (level.ToLower())
-        {
-            case "genji":
-                _player.Heal(_player.MaxHealth);
-                break;
-            case "thisisfine":
-                foreach (var light in GetTree().GetNodesInGroup("lights").Cast<Light2D>()) { light.Enabled = true; }
-                break;
-            case "lightsout":
-                _player.GetNode<CanvasModulate>("CanvasModulate").Visible = !_player.GetNode<CanvasModulate>("CanvasModulate").Visible;
-                break;
-            default:
-                LoadMap(level);
-                break;
-        }
-    }
-
-    private void OnPausedRetryPressed()
-    {
-        RestartGame();
-    }
-
-    private void OnSettingsUpdated()
-    {
-        LoadSettings();
-    }
+    private void OnMainMenuStartButtonPressed() => RestartGame();
+    private void OnLoadLevel(string level) => LoadMap(level);
+    private void OnPausedRetryPressed() => RestartGame();
+    private void OnSettingsUpdated() => LoadSettings();
 
     private void RestartGame()
     {
-        GetNode<PausedUI>("Paused").GetChild<Control>(0).Hide();
-        GetNode<MainMenu>("MainMenu").GetChild<Control>(0).Hide();
-        GetNode<HUD>("HUD").GetChild<Control>(0).Show();
-
         CurrentPlayer.Reset();
         CurrentPlayer.Show();
+
+        UserInterface.HUD.UpdateHUD(CurrentPlayer);
 
         LoadMap("Level1");
         IsPaused = false;
@@ -243,7 +246,7 @@ public class Main : Node
         _enemyTurns.Clear();
         _playerMove.Reset();
 
-        Godot.Collections.Array enemies = GetTree().GetNodesInGroup("enemies");
+        Godot.Collections.Array enemies = GetTree().GetNodesInGroup(NodeGroups.Enemies);
         foreach (Enemy e in enemies)
         {
             if (e.CanSeePlayer)
@@ -256,9 +259,9 @@ public class Main : Node
     /// </summary>
     private void OnPlayerDied()
     {
-        _paused.GetChild<Control>(0).Show();
-        _paused.GetChild<Control>(0).GetNode<Label>("YouDied").Show();
-        _paused.UpdateDeathStats(CurrentPlayer);
+        UserInterface.Paused.Show();
+        UserInterface.Paused.GetNode<Label>("Control/YouDied").Show();
+        UserInterface.Paused.UpdateDeathStats(CurrentPlayer);
         IsPaused = true;
     }
 
@@ -267,8 +270,7 @@ public class Main : Node
     /// </summary>
     private void OnItemPickedUp(Pickup item)
     {
-        HUD hud = GetNode<HUD>("/root/Main/HUD");
-        hud.UpdateHUD(CurrentPlayer);
+        UserInterface.HUD.UpdateHUD(CurrentPlayer);
     }
 
     /// <summary>
@@ -281,11 +283,7 @@ public class Main : Node
 
     private void OnEnemyKilled(Enemy enemy)
     {
-        // Place a randomized bloodstain on the ground and put it in the Environment layer
-        var stain = new Sprite();
-        stain.Texture = enemy.Bloodstains.Random();
-        stain.Position = enemy.Position + new Vector2(4, 4);
-        _loadedScene.GetNode<Node>("Environment").AddChild(stain);
+        // TODO: Add counter
     }
 
     #endregion

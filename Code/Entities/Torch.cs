@@ -7,6 +7,7 @@ public class Torch : Area2D
 
     public override void _Ready()
     {
+        base._Ready();
         _light = GetNode<Light2D>("Light2D");
         _light.Enabled = false;
     }

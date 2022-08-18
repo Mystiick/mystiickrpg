@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://dungeon_tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Nodes/Enemies/Zombie.tscn" type="PackedScene" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Code/Level.cs" type="Script" id=7]
 [ext_resource path="res://Nodes/UI/Theme.tres" type="Theme" id=8]
 [ext_resource path="res://Nodes/Environmental/Torch.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Assets/pixel.png" type="Texture" id=10]
 
 [node name="TileMap" type="TileMap"]
 tile_set = ExtResource( 1 )
@@ -21,6 +22,7 @@ script = ExtResource( 7 )
 position = Vector2( 96, 40 )
 
 [node name="Environment" type="Node" parent="."]
+unique_name_in_owner = true
 
 [node name="Door" parent="Environment" instance=ExtResource( 5 )]
 position = Vector2( 160, 104 )
@@ -46,6 +48,7 @@ position = Vector2( 80, 32 )
 position = Vector2( 112, 32 )
 
 [node name="Pickups" type="Node" parent="."]
+unique_name_in_owner = true
 
 [node name="Key" parent="Pickups" instance=ExtResource( 3 )]
 position = Vector2( 64, 96 )
@@ -56,7 +59,7 @@ position = Vector2( 176, 144 )
 [node name="Enemies" type="Node" parent="."]
 
 [node name="Zombie" parent="Enemies" instance=ExtResource( 2 )]
-position = Vector2( 96, 120 )
+position = Vector2( 96, 112 )
 
 [node name="Zombie2" parent="Enemies" instance=ExtResource( 2 )]
 position = Vector2( 160, 160 )
@@ -88,3 +91,8 @@ margin_bottom = 131.0
 theme = ExtResource( 8 )
 text = "SPACE:    Skip your 
                     turn"
+
+[node name="Light2D" type="Light2D" parent="."]
+position = Vector2( 288, 104 )
+scale = Vector2( 96, 64 )
+texture = ExtResource( 10 )

@@ -1,0 +1,46 @@
+[
+    {
+        "name": "basic_dungeon",
+        "drops": [
+            {
+                "dropChance": 25
+            },
+            {
+                "itemID": 2,
+                "dropChance": 1
+            },
+            {
+                "itemID": 3,
+                "dropChance": 1
+            },
+            {
+                "itemID": 4,
+                "dropChance": 1
+            },
+            {
+                "itemID": 5,
+                "dropChance": 1
+            },
+            {
+                "itemID": 6,
+                "dropChance": 1
+            },
+            {
+                "itemID": 7,
+                "dropChance": 1
+            },
+            {
+                "itemID": 8,
+                "dropChance": 1
+            },
+            {
+                "itemID": 9,
+                "dropChance": 1
+            },
+            {
+                "itemID": 10,
+                "dropChance": 1
+            }
+        ]
+    }
+]
