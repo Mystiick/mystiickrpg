@@ -80,6 +80,16 @@ public class Main : Node
         HandleTimers(delta);
     }
 
+    /// <summary>Builds a Pickup, adds it to the current scene, and registers the events for the collider</summary>
+    public void DropItem(Item drop, Vector2 position)
+    {
+        var pickup = ItemFactory.BuildPickup(drop, position);
+        pickup.AddToGroup(NodeGroups.Pickups);
+        _loadedScene.GetNode("%Pickups").AddChild(pickup);
+
+        pickup.Connect(nameof(Pickup.ItemPickedUp), this, nameof(OnItemPickedUp));
+    }
+
     /// <summary>
     /// Handles the player and enemy turn timers to give some delay to player and enemy movement.
     /// </summary>
@@ -130,9 +140,9 @@ public class Main : Node
         // Free existing objects we're listening to for events
         // If we don't do this, calling `GetNodesInGroup` will get these dying objects during OnLevelLoaded, since they might not have been clenaed up yet
         List<Node> entities = new List<Node>();
-        entities.AddRange(GetTree().GetNodesInGroup("pickups").Cast<Node>());
-        entities.AddRange(GetTree().GetNodesInGroup("stairs").Cast<Node>());
-        entities.AddRange(GetTree().GetNodesInGroup("enemies").Cast<Node>());
+        entities.AddRange(GetTree().GetNodesInGroup(NodeGroups.Pickups).Cast<Node>());
+        entities.AddRange(GetTree().GetNodesInGroup(NodeGroups.Stairs).Cast<Node>());
+        entities.AddRange(GetTree().GetNodesInGroup(NodeGroups.Enemies).Cast<Node>());
 
         foreach (Node s in entities)
         {
@@ -157,13 +167,13 @@ public class Main : Node
         CurrentPlayer.Position = playerSpawn.Position;
 
         // Listen to events for pickups and stairs and enemies
-        Godot.Collections.Array pickups = GetTree().GetNodesInGroup("pickups");
+        Godot.Collections.Array pickups = GetTree().GetNodesInGroup(NodeGroups.Pickups);
         pickups.ConnectAll(nameof(Pickup.ItemPickedUp), this, nameof(OnItemPickedUp));
 
-        Godot.Collections.Array stairs = GetTree().GetNodesInGroup("stairs");
+        Godot.Collections.Array stairs = GetTree().GetNodesInGroup(NodeGroups.Stairs);
         stairs.ConnectAll(nameof(Stairs.StairsEntered), this, nameof(OnStairsEntered));
 
-        Godot.Collections.Array enemies = GetTree().GetNodesInGroup("enemies");
+        Godot.Collections.Array enemies = GetTree().GetNodesInGroup(NodeGroups.Enemies);
         enemies.ConnectAll(nameof(Enemy.EnemyKilled), this, nameof(OnEnemyKilled));
     }
 
@@ -219,7 +229,7 @@ public class Main : Node
         _enemyTurns.Clear();
         _playerMove.Reset();
 
-        Godot.Collections.Array enemies = GetTree().GetNodesInGroup("enemies");
+        Godot.Collections.Array enemies = GetTree().GetNodesInGroup(NodeGroups.Enemies);
         foreach (Enemy e in enemies)
         {
             if (e.CanSeePlayer)

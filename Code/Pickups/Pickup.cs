@@ -9,6 +9,19 @@ public class Pickup : Area2D
     [Export(PropertyHint.MultilineText)] public string Tooltip;
     [Export] public ItemType Type;
 
+    public Item Item { get; set; }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        this.CallDeferred(nameof(ConnectBody));
+    }
+
+    public void ConnectBody()
+    {
+        Connect("body_entered", this, nameof(OnPickupBodyEntered));
+    }
+
     public void OnPickupBodyEntered(PhysicsBody2D collision)
     {
         if (collision is Player p)
@@ -25,12 +38,22 @@ public class Pickup : Area2D
     {
         if (player.Inventory.HasSpace())
         {
-            var audio = GetNode<AudioStreamPlayer>("/root/Main/Pickup");
-            audio.Stream = PickupSounds.Random();
-            audio.Play();
+            if (PickupSounds != null)
+            {
+                var audio = GetNode<AudioStreamPlayer>("/root/Main/Pickup");
+                audio.Stream = PickupSounds.Random();
+                audio.Play();
+            }
 
-            Sprite s = GetNode<Sprite>("Sprite");
-            player.Inventory.Add(ItemFactory.BuildItemByType(Type, s.Texture, $"{ItemName}\n{Tooltip}", this, player));
+            if (Item != null)
+            {
+                player.Inventory.Add(Item);
+            }
+            else
+            {
+                Sprite s = GetNode<Sprite>("Sprite");
+                player.Inventory.Add(ItemFactory.BuildItemByType(Type, s.Texture, $"{ItemName}\n{Tooltip}", this, player));
+            }
 
             QueueFree();
             EmitSignal(nameof(ItemPickedUp), this);

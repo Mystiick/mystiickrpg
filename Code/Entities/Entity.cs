@@ -9,7 +9,7 @@ public class Entity : KinematicBody2D
     public bool CanMove { get; set; }
     [Export] public int Health { get; protected set; }
     [Export] public int Attack { get; protected set; }
-    [Export] public string LootTable { get; set; }
+    [Export] public string LootTable { get; set; } = "basic_dungeon";
 
     public override void _Ready()
     {

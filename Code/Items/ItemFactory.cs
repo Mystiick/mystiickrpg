@@ -43,6 +43,33 @@ public static class ItemFactory
         return _dropTables[name];
     }
 
+    /// <summary>
+    /// Builds a pickup Node with a sprite and collider. 
+    /// Does not add the node to any scene, nor does it register any events to the collider
+    /// </summary>
+    public static Pickup BuildPickup(Item item, Vector2 position = new Vector2())
+    {
+        var pickup = new Pickup()
+        {
+            ItemName = item.Name,
+            Tooltip = item.Tooltip,
+            Position = position,
+            Item = item
+        };
+        var sprite = new Sprite() { Texture = item.Texture, Position = new Vector2(4, 4), Name = "Sprite" };
+        var collider = new CollisionShape2D()
+        {
+            Shape = new RectangleShape2D() { Extents = new Vector2(3, 3) },
+            Position = new Vector2(4, 4),
+            Name = "CollisionShape2D"
+        };
+
+        pickup.AddChild(sprite);
+        pickup.AddChild(collider);
+
+        return pickup;
+    }
+
     /// <summary>Reads the items.json data file and populates a cache by ID</summary>
     public static void LoadItemsFromFile()
     {

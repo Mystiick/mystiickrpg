@@ -181,18 +181,7 @@ public class Enemy : Entity
 
             if (drop != null)
             {
-                var pickup = new Pickup()
-                {
-                    ItemName = drop.Name,
-                    Tooltip = drop.Tooltip,
-                    Position = this.Position
-                };
-                var sprite = new Sprite() { Texture = drop.Texture, Position = new Vector2(4, 4) };
-
-                pickup.AddChild(sprite);
-                GetNode("%Pickups").AddChild(pickup);
-
-                GD.Print(drop.Name);
+                GetNode<Main>("/root/Main").DropItem(drop, this.Position);
             }
         }
     }

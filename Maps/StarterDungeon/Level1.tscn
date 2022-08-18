@@ -59,16 +59,13 @@ position = Vector2( 176, 144 )
 [node name="Enemies" type="Node" parent="."]
 
 [node name="Zombie" parent="Enemies" instance=ExtResource( 2 )]
-position = Vector2( 96, 120 )
-LootTable = "basic_dungeon"
+position = Vector2( 96, 112 )
 
 [node name="Zombie2" parent="Enemies" instance=ExtResource( 2 )]
 position = Vector2( 160, 160 )
-LootTable = "basic_dungeon"
 
 [node name="Zombie3" parent="Enemies" instance=ExtResource( 2 )]
 position = Vector2( 184, 128 )
-LootTable = "basic_dungeon"
 
 [node name="Label" type="Label" parent="."]
 margin_left = 248.0
