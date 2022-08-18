@@ -90,6 +90,23 @@ public class Main : Node
         pickup.Connect(nameof(Pickup.ItemPickedUp), this, nameof(OnItemPickedUp));
     }
 
+    public void PlayerDropItem(Item item)
+    {
+        Vector2[] nsew = {
+            new Vector2(0,-8), // N
+            new Vector2(0,8),  // S
+            new Vector2(8,0),  // E
+            new Vector2(-8,0), // W
+        };
+
+        var openPositions = nsew.Where(x => _player.MoveAndCollide(x, testOnly: true) == null).ToArray();
+        if (openPositions.Any())
+        {
+            DropItem(item, _player.Position + openPositions.Random());
+            _player.Inventory.Remove(item);
+        }
+    }
+
     /// <summary>
     /// Handles the player and enemy turn timers to give some delay to player and enemy movement.
     /// </summary>

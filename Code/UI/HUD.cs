@@ -19,6 +19,7 @@ public class HUD : CanvasLayer
             _inventoryButtons[i] = GetNode<ItemButton>($"Base/InventoryAndPaperdoll/Inventory/{i}");
             _inventoryButtons[i].Inventory = player.Inventory;
             _inventoryButtons[i].Connect(nameof(ItemButton.ItemUsed), this, nameof(OnInventoryItemUsed));
+            _inventoryButtons[i].Connect(nameof(ItemButton.ItemDropped), this, nameof(OnInventoryItemDropped));
         }
     }
 
@@ -78,6 +79,14 @@ public class HUD : CanvasLayer
     public void OnInventoryItemUsed()
     {
         UpdateInventory(GetNode<Main>("/root/Main").CurrentPlayer);
+    }
+
+    public void OnInventoryItemDropped(Item item)
+    {
+        var main = GetNode<Main>("/root/Main");
+        main.PlayerDropItem(item);
+
+        UpdateInventory(main.CurrentPlayer);
     }
 
     private void EquipItem(Equipable item, string nodePath)

@@ -6,7 +6,8 @@
 margin_right = 12.0
 margin_bottom = 12.0
 focus_mode = 0
+button_mask = 3
 expand = true
 script = ExtResource( 1 )
 
-[connection signal="pressed" from="." to="." method="OnItemPressed"]
+[connection signal="gui_input" from="." to="." method="OnItemGuiInput"]

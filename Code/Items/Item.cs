@@ -2,7 +2,7 @@ using Godot;
 using System.Linq;
 using System.Text;
 
-public class Item
+public class Item : Godot.Object
 {
     public int ID { get; set; }
     public string TexturePath { get; set; }
