@@ -78,7 +78,7 @@ public class HUD : CanvasLayer
     /// </summary>
     public void OnInventoryItemUsed()
     {
-        UpdateInventory(GetNode<Main>("/root/Main").CurrentPlayer);
+        UpdateHUD(GetNode<Main>("/root/Main").CurrentPlayer);
     }
 
     public void OnInventoryItemDropped(Item item)

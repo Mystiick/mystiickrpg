@@ -20,17 +20,14 @@ public class Inventory : IEnumerable<Item>
     /// <summary>
     /// Checks if there are any free spaces in the inventory
     /// </summary>
-    public bool HasSpace()
-    {
-        return _items.Any(x => x == null);
-    }
+    public bool HasSpace => _items.Any(x => x == null);
 
     /// <summary>
     /// Add the specified item to the inventory. If the inventory is full, it throws a OverflowException
     /// </summary>
     public int Add(Item item)
     {
-        if (!HasSpace())
+        if (!HasSpace)
             throw new OverflowException("Cannot add an item to the inventory if it is full. Check before adding an item and handle properly if the inventory is full.");
 
         item.Owner = this.Owner;

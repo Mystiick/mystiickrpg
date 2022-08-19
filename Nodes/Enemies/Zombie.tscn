@@ -15,7 +15,7 @@ extents = Vector2( 3, 3 )
 
 [node name="Zombie" type="KinematicBody2D" groups=["enemies"]]
 script = ExtResource( 2 )
-Health = 2
+BaseHealth = 2
 Attack = 1
 Range = 1
 Type = 1
