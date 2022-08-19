@@ -15,6 +15,12 @@ public class Equipment
 
     public Equipment()
     {
+        Clear();
+    }
+
+    /// <summary>Resets all of the equipment back to null items</summary>
+    public void Clear()
+    {
         Items = new Dictionary<Equipable.SlotType, Equipable>() {
             {Equipable.SlotType.Head, null},
             {Equipable.SlotType.Chest, null},

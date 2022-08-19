@@ -11,7 +11,7 @@
         "type": "Equipable",
         "slot": "Amulet",
         "name": "Starter Amulet",
-        "tooltip": "This is loaded from json",
+        "tooltip": "A small necklace with a small ruby.",
         "texturePath": "res://Assets/Items/starter_amulet.png",
         "modifiers": [
             {
@@ -25,7 +25,7 @@
         "type": "equipable",
         "slot": "Head",
         "name": "Starter Helm",
-        "tooltip": "This is loaded from json",
+        "tooltip": "A flimsy helmet.",
         "texturePath": "res://Assets/Items/starter_helm.png",
         "modifiers": [
             {
@@ -39,11 +39,15 @@
         "type": "equipable",
         "slot": "Chest",
         "name": "Starter Chest",
-        "tooltip": "This is loaded from json",
+        "tooltip": "Better than rags, but not by much.",
         "texturePath": "res://Assets/Items/starter_chest.png",
         "modifiers": [
             {
                 "type": "Defense",
+                "value": 1
+            },
+            {
+                "type": "Health",
                 "value": 1
             }
         ]
@@ -53,7 +57,7 @@
         "type": "equipable",
         "slot": "Legs",
         "name": "Starter Pants",
-        "tooltip": "This is loaded from json",
+        "tooltip": "Better than rags, but not by much.",
         "texturePath": "res://Assets/Items/starter_pants.png",
         "modifiers": [
             {
@@ -67,7 +71,7 @@
         "type": "equipable",
         "slot": "Boots",
         "name": "Starter Boots",
-        "tooltip": "This is loaded from json",
+        "tooltip": "Prevents your feet from getting too cold from the stone ground.",
         "texturePath": "res://Assets/Items/starter_boots.png",
         "modifiers": [
             {
@@ -81,7 +85,7 @@
         "type": "equipable",
         "slot": "Shoulders",
         "name": "Starter Shoulders",
-        "tooltip": "This is loaded from json",
+        "tooltip": "I think these are supposed to be shoulder pads.",
         "texturePath": "res://Assets/Items/starter_shoulders.png",
         "modifiers": [
             {
@@ -95,7 +99,7 @@
         "type": "equipable",
         "slot": "RightHand",
         "name": "Starter Sword",
-        "tooltip": "This is loaded from json",
+        "tooltip": "Barely even a knife.",
         "texturePath": "res://Assets/Items/starter_sword.png",
         "modifiers": [
             {
@@ -109,7 +113,7 @@
         "type": "equipable",
         "slot": "LeftHand",
         "name": "Starter Shield",
-        "tooltip": "This is loaded from json",
+        "tooltip": "Metal that has been mushed into the shape of a shield.",
         "texturePath": "res://Assets/Items/starter_shield.png",
         "modifiers": [
             {

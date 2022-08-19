@@ -36,7 +36,7 @@ public class Pickup : Area2D
     /// </summary>
     public virtual void HandlePickup(Player player)
     {
-        if (player.Inventory.HasSpace())
+        if (player.Inventory.HasSpace)
         {
             if (PickupSounds != null)
             {

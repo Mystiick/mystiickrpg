@@ -65,11 +65,12 @@ public class Player : Entity
     /// </summary>
     public void Reset()
     {
-        MaxHealth = 10;
+        BaseHealth = 10;
         Health = 10;
         Attack = 1;
         CanMove = true;
 
+        Equipment.Clear();
         Inventory.Clear();
     }
 
