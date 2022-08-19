@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 public class Equipment
 {
@@ -43,6 +44,14 @@ public class Equipment
         Items[item.Slot] = item;
 
         return output;
+    }
+
+    public IEnumerable<Stat> ModifierByStat(Stat.StatType stat)
+    {
+        return Items.
+                Where(x => x.Value != null).
+                SelectMany(x => x.Value.Modifiers).
+                Where(x => x.Type == stat);
     }
 
 }

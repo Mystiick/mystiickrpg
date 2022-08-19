@@ -31,7 +31,7 @@ public class Player : Entity
     /// </summary>
     public void Fight(Enemy enemy)
     {
-        enemy.Damage(this.Attack);
+        enemy.Damage((int)(GD.Randi() % this.MaxAttack) + 1);
     }
 
     /// <summary>
@@ -39,6 +39,9 @@ public class Player : Entity
     /// </summary>
     public void Damage(int amount)
     {
+        amount = Mathf.Clamp(amount -= RandomDefenseAmount(), 0, amount);
+        System.Diagnostics.Debug.Assert(amount >= 0, "Calculated damage amount must not be negative");
+
         Health -= amount;
         _main.UserInterface.HUD.UpdateHealth(Health, MaxHealth);
 
