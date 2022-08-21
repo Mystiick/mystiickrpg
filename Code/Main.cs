@@ -44,7 +44,6 @@ public class Main : Node
         UserInterface.HideAll();
         UserInterface.MainMenu.CallDeferred("show");
 
-        CurrentPlayer = GetNode<Player>("%Player");
         CurrentPlayer.Hide();
 
         LoadSettings();
