@@ -1,6 +1,5 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Nodes/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Code/Main.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Sounds/background_air_vent_fan_loop_01.wav" type="AudioStream" id=7]
 [ext_resource path="res://Nodes/UI/UIManager.tscn" type="PackedScene" id=9]
@@ -40,18 +39,14 @@ margin_bottom = 240.0
 rect_scale = Vector2( 2, 2 )
 
 [node name="GameCam" type="Viewport" parent="GameContainer"]
+unique_name_in_owner = true
 size = Vector2( 384, 240 )
 world = SubResource( 1 )
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="Player" parent="GameContainer/GameCam" instance=ExtResource( 2 )]
-unique_name_in_owner = true
-
 [connection signal="DebugLoadLevel" from="UIManager" to="." method="OnLoadLevel"]
 [connection signal="MainMenuStartButtonPressed" from="UIManager" to="." method="OnMainMenuStartButtonPressed"]
 [connection signal="PausedRestartButtonPressed" from="UIManager" to="." method="OnPausedRetryPressed"]
 [connection signal="SettingsUpdated" from="UIManager" to="." method="OnSettingsUpdated"]
-[connection signal="PlayerDied" from="GameContainer/GameCam/Player" to="." method="OnPlayerDied"]
-[connection signal="PlayerMoved" from="GameContainer/GameCam/Player" to="." method="OnPlayerMoved"]

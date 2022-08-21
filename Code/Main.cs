@@ -19,7 +19,7 @@ public class Main : Node
     {
         get
         {
-            return _player ?? GetNode<Player>("%Player");
+            return _player ?? LoadPlayer();
         }
         private set
         {
@@ -147,7 +147,7 @@ public class Main : Node
             _loadedScene = scene;
             _loadedScene.Connect(nameof(Level.LevelLoaded), this, "OnLevelLoaded");
 
-            GetNode("GameContainer").GetNode("GameCam").CallDeferred("add_child", scene);
+            GetNode("GameContainer/GameCam").CallDeferred("add_child", scene);
         }
     }
 
@@ -287,4 +287,25 @@ public class Main : Node
 
     #endregion
 
+    private Player LoadPlayer()
+    {
+        var output = GetNodeOrNull<Player>("%GameCam/Player");
+
+        if (output == null)
+        {
+            // TODO: Load settings from file
+
+            Player player = (Player)ResourceLoader.Load<PackedScene>("res://Nodes/Player.tscn").Instance();
+            player.Name = "Player";
+
+            GetNode("/root/Main/GameContainer/GameCam").AddChild(player, true);
+
+            player.Connect(nameof(Player.PlayerMoved), this, nameof(OnPlayerMoved));
+            player.Connect(nameof(Player.PlayerDied), this, nameof(OnPlayerDied));
+        }
+
+        _player = GetNode<Player>("%GameCam/Player");
+
+        return _player;
+    }
 }
