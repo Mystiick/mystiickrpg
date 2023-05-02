@@ -10,7 +10,19 @@ public partial class Main : Node
 
     private Level _loadedScene;
     private string _worldPrefix;
-    private Queue<Enemy> _enemyTurns;
+
+
+    private Queue<Enemy> test;
+    private Queue<Enemy> _enemyTurns
+    {
+        get => test;
+        set
+        {
+            GD.Print("set");
+            if (value == null) GD.Print("and it's null");
+            test = value;
+        }
+    }
     private Timeout _enemyMove;
     private Timeout _playerMove;
     private Player _player;
@@ -34,7 +46,6 @@ public partial class Main : Node
     /// </summary>
     public override void _Ready()
     {
-        GD.Print("Ready");
         base._Ready();
 
         // Read json files and prepopulate ItemFactory data
@@ -59,7 +70,6 @@ public partial class Main : Node
 
     public override void _Process(double delta)
     {
-        GD.Print("Process");
         if (Input.IsActionJustPressed("debug"))
         {
             UserInterface.Debug.ShowLevelSelect();
