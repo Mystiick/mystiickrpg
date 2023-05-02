@@ -1,4 +1,4 @@
-public class SerializedItem : Item
+public partial class SerializedItem : Item
 {
     public string Type { get; set; }
     // Equipable properties

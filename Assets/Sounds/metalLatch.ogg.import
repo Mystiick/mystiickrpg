@@ -1,15 +1,19 @@
 [remap]
 
-importer="ogg_vorbis"
-type="AudioStreamOGGVorbis"
-path="res://.import/metalLatch.ogg-4849e1058a9f8fa9536d39f64071986e.oggstr"
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dmr4i4tgxs3dp"
+path="res://.godot/imported/metalLatch.ogg-4849e1058a9f8fa9536d39f64071986e.oggvorbisstr"
 
 [deps]
 
 source_file="res://Assets/Sounds/metalLatch.ogg"
-dest_files=[ "res://.import/metalLatch.ogg-4849e1058a9f8fa9536d39f64071986e.oggstr" ]
+dest_files=["res://.godot/imported/metalLatch.ogg-4849e1058a9f8fa9536d39f64071986e.oggvorbisstr"]
 
 [params]
 
 loop=false
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,11 +1,11 @@
 using Godot;
 using System;
 
-public class Door : KinematicBody2D
+public partial class Door : CharacterBody2D
 {
-    [Export] public Texture Locked;
-    [Export] public Texture Opened;
-    [Export] public Texture Closed;
+    [Export] public Texture2D Locked;
+    [Export] public Texture2D Opened;
+    [Export] public Texture2D Closed;
     [Export] public DoorState State = DoorState.Closed;
     [Export] public AudioStream UnlockSound;
     [Export] public AudioStream OpenSound;
@@ -49,7 +49,7 @@ public class Door : KinematicBody2D
         State = state;
 
         // Handle texture and collision swapping
-        Sprite node = GetNode<Sprite>("Sprite");
+        Sprite2D node = GetNode<Sprite2D>("Sprite2D");
         CollisionShape2D collider = GetNode<CollisionShape2D>("CollisionShape2D");
 
         switch (state)

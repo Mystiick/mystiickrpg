@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class Equipment
+public partial class Equipment
 {
     public Equipable Head { get { return Items[Equipable.SlotType.Head]; } }
     public Equipable Chest { get { return Items[Equipable.SlotType.Chest]; } }

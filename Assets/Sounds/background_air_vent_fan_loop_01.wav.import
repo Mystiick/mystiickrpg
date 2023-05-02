@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/background_air_vent_fan_loop_01.wav-3d26f689cb7012e812e70a721b7fa07e.sample"
+type="AudioStreamWAV"
+uid="uid://cujnpys67fhwl"
+path="res://.godot/imported/background_air_vent_fan_loop_01.wav-3d26f689cb7012e812e70a721b7fa07e.sample"
 
 [deps]
 
 source_file="res://Assets/Sounds/background_air_vent_fan_loop_01.wav"
-dest_files=[ "res://.import/background_air_vent_fan_loop_01.wav-3d26f689cb7012e812e70a721b7fa07e.sample" ]
+dest_files=["res://.godot/imported/background_air_vent_fan_loop_01.wav-3d26f689cb7012e812e70a721b7fa07e.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
-edit/loop=true
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

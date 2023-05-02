@@ -2,12 +2,12 @@ using Godot;
 using System;
 using System.Linq;
 
-public class Enemy : Entity
+public partial class Enemy : Entity
 {
-    [Signal] public delegate void EnemyKilled(Enemy me);
+    [Signal] public delegate void EnemyKilledEventHandler(Enemy me);
     [Export] EnemyType Type;
     [Export] public int TileScale = 8;
-    [Export] public Texture[] Bloodstains;
+    [Export] public Texture2D[] Bloodstains;
     [Export] public AudioStream[] HitSounds;
     [Export] public int Range { get; private set; }
     public bool CanSeePlayer { get; private set; }
@@ -23,13 +23,14 @@ public class Enemy : Entity
     /// <summary>
     /// Runs every frame, sets a bool indicating if the current entity can see the player entity
     /// </summary>
-    public override void _PhysicsProcess(float delta)
+    public override void _PhysicsProcess(double delta)
     {
         if (player != null)
         {
-            Physics2DDirectSpaceState spaceState = GetWorld2d().DirectSpaceState;
+            PhysicsDirectSpaceState2D spaceState = GetWorld2D().DirectSpaceState;
+            var query = PhysicsRayQueryParameters2D.Create(this.Position + Vector2.One, player.Position + Vector2.One);
+            var result = spaceState.IntersectRay(query);
 
-            var result = spaceState.IntersectRay(this.Position + Vector2.One, player.Position + Vector2.One, new Godot.Collections.Array { this });
             if (result != null && result.Keys.Cast<string>().Contains("collider"))
             {
                 CanSeePlayer = result["collider"] is Player;
@@ -89,11 +90,11 @@ public class Enemy : Entity
     {
         Vector2 offset = player.Position - this.Position;
 
-        if (Math.Abs(offset.x) <= Range * TileScale && offset.y == 0)
+        if (Math.Abs(offset.X) <= Range * TileScale && offset.Y == 0)
         {
             return true;
         }
-        else if (Math.Abs(offset.y) <= Range * TileScale && offset.x == 0)
+        else if (Math.Abs(offset.Y) <= Range * TileScale && offset.X == 0)
         {
             return true;
         }
@@ -120,8 +121,8 @@ public class Enemy : Entity
                 // Then we can place the entity back on their tile
                 var newPos = Position / (float)TileScale;
                 Position = new Vector2(
-                    Mathf.RoundToInt(newPos.x),
-                    Mathf.RoundToInt(newPos.y)
+                    Mathf.RoundToInt(newPos.X),
+                    Mathf.RoundToInt(newPos.Y)
                 ) * TileScale;
             }
         }
@@ -135,26 +136,26 @@ public class Enemy : Entity
     {
         // Determine cardinal direction player is, in relation to the enemy
         Vector2 offset = (this.Position - player.Position) / (float)TileScale;
-        offset = new Vector2(Mathf.RoundToInt(offset.x), Mathf.RoundToInt(offset.y));
+        offset = new Vector2(Mathf.RoundToInt(offset.X), Mathf.RoundToInt(offset.Y));
 
         Vector2 direction = Vector2.Zero;
 
-        if (Math.Abs(offset.x) == Math.Abs(offset.y))
+        if (Math.Abs(offset.X) == Math.Abs(offset.Y))
         {
             if (GD.Randi() % 2 == 0)
-                direction.x += (offset.x < 0 ? 1 : -1);
+                direction.X += (offset.X < 0 ? 1 : -1);
             else
-                direction.y += (offset.y < 0 ? 1 : -1);
+                direction.Y += (offset.Y < 0 ? 1 : -1);
         }
-        else if (Math.Abs(offset.x) > Math.Abs(offset.y))
+        else if (Math.Abs(offset.X) > Math.Abs(offset.Y))
         {
             // More distance to move horizontal, so try to move that way first
-            direction.x += (offset.x < 0 ? 1 : -1);
+            direction.X += (offset.X < 0 ? 1 : -1);
         }
         else
         {
             // More vertical distance, go that way
-            direction.y += (offset.y < 0 ? 1 : -1);
+            direction.Y += (offset.Y < 0 ? 1 : -1);
         }
 
         // Move that direction 1 tile
@@ -166,7 +167,7 @@ public class Enemy : Entity
     private void DropStain()
     {
         // Place a randomized bloodstain on the ground and put it in the Environment layer
-        var stain = new Sprite();
+        var stain = new Sprite2D();
         stain.Texture = Bloodstains.Random();
         stain.Position = Position + new Vector2(4, 4);
 
@@ -190,6 +191,6 @@ public class Enemy : Entity
     {
         Crab,
         Zombie,
-        Skeleton
+        Skeleton3D
     }
 }

@@ -1,18 +1,18 @@
 using Godot;
 using System.Linq;
 
-public class DebugUI : CanvasLayer
+public partial class DebugUI : CanvasLayer
 {
-    [Signal] public delegate void LoadLevelPressed(string level);
+    [Signal] public delegate void LoadLevelPressedEventHandler(string level);
 
     #region | Load Level Popup |
     public void ShowLevelSelect()
     {
-        GetNode<PopupDialog>("LoadLevel").PopupCentered();
+        GetNode<Popup>("LoadLevel").PopupCentered();
     }
     private void OnLoadLevelAcceptPressed()
     {
-        GetNode<PopupDialog>("LoadLevel").Hide();
+        GetNode<Popup>("LoadLevel").Hide();
         string input = GetNode<LineEdit>("LoadLevel/Level").Text;
 
         var player = GetNode<Main>("/root/Main").CurrentPlayer;
@@ -25,7 +25,7 @@ public class DebugUI : CanvasLayer
 
             case "thisisfine":
                 // Turn on all light sources
-                foreach (var light in GetTree().GetNodesInGroup("lights").Cast<Light2D>()) { light.Enabled = true; }
+                foreach (var light in GetTree().GetNodesInGroup("lights").Cast<PointLight2D>()) { light.Enabled = true; }
                 break;
 
             case "lightsout":
@@ -58,7 +58,7 @@ public class DebugUI : CanvasLayer
     }
     private void OnLoadLevelCancelPressed()
     {
-        GetNode<PopupDialog>("LoadLevel").Hide();
+        GetNode<Popup>("LoadLevel").Hide();
     }
     #endregion
 

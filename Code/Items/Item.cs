@@ -2,11 +2,11 @@ using Godot;
 using System.Linq;
 using System.Text;
 
-public class Item : Godot.Object
+public partial class Item : Godot.GodotObject
 {
     public int ID { get; set; }
     public string TexturePath { get; set; }
-    public Texture Texture { get; set; }
+    public Texture2D Texture { get; set; }
     public string Name { get; set; }
     public string Tooltip { get; set; }
     public Entity Owner { get; set; }
@@ -19,7 +19,7 @@ public class Item : Godot.Object
 
     public Item(Pickup source, Entity owner)
     {
-        Texture = source.GetNode<Sprite>("Sprite").Texture;
+        Texture = source.GetNode<Sprite2D>("Sprite2D").Texture;
         Name = source.Tooltip;
         Owner = owner;
     }

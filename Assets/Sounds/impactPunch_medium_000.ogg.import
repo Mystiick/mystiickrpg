@@ -1,15 +1,19 @@
 [remap]
 
-importer="ogg_vorbis"
-type="AudioStreamOGGVorbis"
-path="res://.import/impactPunch_medium_000.ogg-6c74b9803b7b512bcfe3a733ef722b3f.oggstr"
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cme1hwtlk6wap"
+path="res://.godot/imported/impactPunch_medium_000.ogg-6c74b9803b7b512bcfe3a733ef722b3f.oggvorbisstr"
 
 [deps]
 
 source_file="res://Assets/Sounds/impactPunch_medium_000.ogg"
-dest_files=[ "res://.import/impactPunch_medium_000.ogg-6c74b9803b7b512bcfe3a733ef722b3f.oggstr" ]
+dest_files=["res://.godot/imported/impactPunch_medium_000.ogg-6c74b9803b7b512bcfe3a733ef722b3f.oggvorbisstr"]
 
 [params]
 
 loop=false
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

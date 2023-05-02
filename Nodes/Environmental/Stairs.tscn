@@ -1,11 +1,11 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Code/Entities/Stairs.cs" type="Script" id=1]
-[ext_resource path="res://Assets/stairs_up.png" type="Texture" id=2]
-[ext_resource path="res://Assets/stairs_down.png" type="Texture" id=5]
+[ext_resource path="res://Assets/stairs_up.png" type="Texture2D" id=2]
+[ext_resource path="res://Assets/stairs_down.png" type="Texture2D" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 4, 4 )
+size = Vector2( 4, 4 )
 
 [node name="Stairs" type="Area2D" groups=["stairs"]]
 script = ExtResource( 1 )
@@ -13,7 +13,7 @@ StairsUp = ExtResource( 2 )
 StairsDown = ExtResource( 5 )
 Type = 1
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2( 4, 4 )
 texture = ExtResource( 5 )
 

@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public class SettingsUI : CanvasLayer
+public partial class SettingsUI : CanvasLayer
 {
-    [Signal] public delegate void SettingsUpdated();
+    [Signal] public delegate void SettingsUpdatedEventHandler();
 
     private static Settings _settings;
     public Settings CurrentSettings

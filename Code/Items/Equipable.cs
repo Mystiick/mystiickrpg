@@ -1,4 +1,4 @@
-public class Equipable : Item
+public partial class Equipable : Item
 {
     public SlotType Slot { get; set; }
 

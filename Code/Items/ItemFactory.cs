@@ -10,7 +10,7 @@ public static class ItemFactory
     private static Item[] _allItems;
     private static Dictionary<string, DropTable> _dropTables;
 
-    public static Item BuildItemByType(ItemType type, Texture texture, string tooltip, Pickup source, Entity owner)
+    public static Item BuildItemByType(ItemType type, Texture2D texture, string tooltip, Pickup source, Entity owner)
     {
         switch (type)
         {
@@ -32,7 +32,7 @@ public static class ItemFactory
     public static Item GetItemByID(int id)
     {
         var output = _allItems[id].Clone();
-        output.Texture = ResourceLoader.Load<Texture>(output.TexturePath);
+        output.Texture = ResourceLoader.Load<Texture2D>(output.TexturePath);
 
         return output;
     }
@@ -56,10 +56,10 @@ public static class ItemFactory
             Position = position,
             Item = item
         };
-        var sprite = new Sprite() { Texture = item.Texture, Position = new Vector2(4, 4), Name = "Sprite" };
+        var sprite = new Sprite2D() { Texture = item.Texture, Position = new Vector2(4, 4), Name = "Sprite2D" };
         var collider = new CollisionShape2D()
         {
-            Shape = new RectangleShape2D() { Extents = new Vector2(3, 3) },
+            Shape = new RectangleShape2D() { Size = new Vector2(3, 3) },
             Position = new Vector2(4, 4),
             Name = "CollisionShape2D"
         };
@@ -73,8 +73,7 @@ public static class ItemFactory
     /// <summary>Reads the items.json data file and populates a cache by ID</summary>
     public static void LoadItemsFromFile()
     {
-        var itemFile = new File();
-        itemFile.Open("res://Data/items.json", File.ModeFlags.Read);
+        using var itemFile = FileAccess.Open("res://Data/items.json", FileAccess.ModeFlags.Read);
 
         var items = JsonConvert.DeserializeObject<SerializedItem[]>(itemFile.GetAsText()).Select(x => x.ToItem());
         _allItems = new Item[items.Max(x => x.ID) + 1];
@@ -87,8 +86,7 @@ public static class ItemFactory
     public static void LoadLootTablesFromFile()
     {
         // Load from file
-        var file = new File();
-        file.Open("res://Data/drop_tables.json", File.ModeFlags.Read);
+        using var file = FileAccess.Open("res://Data/drop_tables.json", FileAccess.ModeFlags.Read);
 
         // Process tables into dictionary of <Name, Table>
         var tables = JsonConvert.DeserializeObject<DropTable[]>(file.GetAsText());
@@ -99,7 +97,6 @@ public static class ItemFactory
         }
     }
 }
-
 
 public enum ItemType
 {

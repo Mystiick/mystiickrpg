@@ -1,52 +1,37 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://ccihgq5jeskvv"]
 
-[ext_resource path="res://Code/Main.cs" type="Script" id=3]
-[ext_resource path="res://Assets/Sounds/background_air_vent_fan_loop_01.wav" type="AudioStream" id=7]
-[ext_resource path="res://Nodes/UI/UIManager.tscn" type="PackedScene" id=9]
-
-[sub_resource type="Environment" id=2]
-
-[sub_resource type="Environment" id=3]
-
-[sub_resource type="World" id=1]
-environment = SubResource( 2 )
-fallback_environment = SubResource( 3 )
+[ext_resource type="Script" path="res://Code/Main.cs" id="3"]
+[ext_resource type="AudioStream" uid="uid://cujnpys67fhwl" path="res://Assets/Sounds/background_air_vent_fan_loop_01.wav" id="7"]
+[ext_resource type="PackedScene" path="res://Nodes/UI/UIManager.tscn" id="9"]
 
 [node name="Main" type="Node"]
-script = ExtResource( 3 )
+script = ExtResource("3")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-margin_left = -8.0
-margin_top = -8.0
-margin_right = 851.0
-margin_bottom = 481.0
-rect_rotation = -360.0
-color = Color( 0, 0, 0, 1 )
+offset_right = 859.0
+offset_bottom = 489.0
+color = Color(0, 0, 0, 1)
 
-[node name="UIManager" parent="." instance=ExtResource( 9 )]
+[node name="UIManager" parent="." instance=ExtResource("9")]
+layout_mode = 3
+anchors_preset = 0
 
 [node name="BackgroundNoise" type="AudioStreamPlayer" parent="." groups=["background_noise"]]
-stream = ExtResource( 7 )
+stream = ExtResource("7")
 
 [node name="EnemyHit" type="AudioStreamPlayer" parent="." groups=["sound_effects"]]
 
 [node name="Pickup" type="AudioStreamPlayer" parent="." groups=["sound_effects"]]
 
-[node name="GameContainer" type="ViewportContainer" parent="."]
-margin_left = 64.0
-margin_right = 448.0
-margin_bottom = 240.0
-rect_scale = Vector2( 2, 2 )
+[node name="GameContainer" type="SubViewportContainer" parent="."]
+offset_left = 64.0
+offset_right = 448.0
+offset_bottom = 240.0
+scale = Vector2(2, 2)
 
-[node name="GameCam" type="Viewport" parent="GameContainer"]
+[node name="GameCam" type="SubViewport" parent="GameContainer"]
 unique_name_in_owner = true
-size = Vector2( 384, 240 )
-world = SubResource( 1 )
 transparent_bg = true
 handle_input_locally = false
-render_target_update_mode = 3
-
-[connection signal="DebugLoadLevel" from="UIManager" to="." method="OnLoadLevel"]
-[connection signal="MainMenuStartButtonPressed" from="UIManager" to="." method="OnMainMenuStartButtonPressed"]
-[connection signal="PausedRestartButtonPressed" from="UIManager" to="." method="OnPausedRetryPressed"]
-[connection signal="SettingsUpdated" from="UIManager" to="." method="OnSettingsUpdated"]
+size = Vector2i(384, 240)
+render_target_update_mode = 4

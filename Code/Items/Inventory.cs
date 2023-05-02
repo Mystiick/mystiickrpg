@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Inventory : IEnumerable<Item>
+public partial class Inventory : IEnumerable<Item>
 {
     public int Size { get; private set; }
     public Entity Owner { get; set; }

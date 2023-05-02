@@ -1,7 +1,7 @@
 using Godot;
 using Newtonsoft.Json;
 
-public class Settings
+public partial class Settings
 {
     public WindowType Window { get; set; }
     public int MaxFps { get; set; }
@@ -17,10 +17,8 @@ public class Settings
     /// </summary>
     public static Settings FromFile(string fileName = "user://settings.json")
     {
-        var f = new File();
-
         // Create a default file if one doesn't exist yet
-        if (!f.FileExists(fileName))
+        if (!FileAccess.FileExists(fileName))
         {
             new Settings()
             {
@@ -31,7 +29,7 @@ public class Settings
             }.ToFile();
         }
 
-        f.Open(fileName, File.ModeFlags.Read);
+        var f = FileAccess.Open(fileName, FileAccess.ModeFlags.Read);
         return JsonConvert.DeserializeObject<Settings>(f.GetLine());
     }
 
@@ -41,9 +39,7 @@ public class Settings
     /// </summary>
     public void ToFile(string fileName = "user://settings.json")
     {
-        var f = new File();
-
-        f.Open(fileName, File.ModeFlags.WriteRead);
+        using var f = FileAccess.Open(fileName, FileAccess.ModeFlags.WriteRead);
         f.StoreLine(JsonConvert.SerializeObject(this));
         f.Close();
     }

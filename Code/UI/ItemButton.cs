@@ -1,9 +1,9 @@
 using Godot;
 
-public class ItemButton : TextureButton
+public partial class ItemButton : TextureButton
 {
-    [Signal] public delegate void ItemUsed();
-    [Signal] public delegate void ItemDropped(Item item);
+    [Signal] public delegate void ItemUsedEventHandler();
+    [Signal] public delegate void ItemDroppedEventHandler(Item item);
     public Item Item;
     public Inventory Inventory;
 
@@ -30,11 +30,11 @@ public class ItemButton : TextureButton
         {
             switch (ie.ButtonIndex)
             {
-                case MouseButtons.Left:
+                case MouseButton.Left:
                     OnItemPressed();
                     break;
 
-                case MouseButtons.Right:
+                case MouseButton.Right:
                     OnItemDropped();
                     break;
             }

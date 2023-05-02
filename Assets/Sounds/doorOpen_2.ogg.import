@@ -1,15 +1,19 @@
 [remap]
 
-importer="ogg_vorbis"
-type="AudioStreamOGGVorbis"
-path="res://.import/doorOpen_2.ogg-5f7bd9af32cfb55b2979c771edb94a87.oggstr"
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b16n51ik6rrmd"
+path="res://.godot/imported/doorOpen_2.ogg-5f7bd9af32cfb55b2979c771edb94a87.oggvorbisstr"
 
 [deps]
 
 source_file="res://Assets/Sounds/doorOpen_2.ogg"
-dest_files=[ "res://.import/doorOpen_2.ogg-5f7bd9af32cfb55b2979c771edb94a87.oggstr" ]
+dest_files=["res://.godot/imported/doorOpen_2.ogg-5f7bd9af32cfb55b2979c771edb94a87.oggvorbisstr"]
 
 [params]
 
 loop=false
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

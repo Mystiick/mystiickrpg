@@ -1,4 +1,4 @@
-public class Drop
+public partial class Drop
 {
     public int DropChance { get; set; }
     public int ItemID { get; set; }

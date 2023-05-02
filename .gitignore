@@ -12,3 +12,4 @@ data_*/
 
 bin/
 Assets/Sounds/**/*.wav
+.godot/**

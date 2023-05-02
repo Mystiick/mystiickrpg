@@ -1,11 +1,11 @@
 using Godot;
 using System;
 
-public class Stairs : Area2D
+public partial class Stairs : Area2D
 {
-    [Signal] public delegate void StairsEntered(Stairs sendter);
-    [Export] public Texture StairsUp;
-    [Export] public Texture StairsDown;
+    [Signal] public delegate void StairsEnteredEventHandler(Stairs sendter);
+    [Export] public Texture2D StairsUp;
+    [Export] public Texture2D StairsDown;
     [Export] public StairType Type;
     [Export] public string Destination;
 
@@ -14,7 +14,7 @@ public class Stairs : Area2D
     {
         base._Ready();
 
-        Sprite sprite = GetNode<Sprite>("Sprite");
+        Sprite2D sprite = GetNode<Sprite2D>("Sprite2D");
         switch (Type)
         {
             case StairType.Up:

@@ -3,18 +3,20 @@ using Godot;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Main : Node
+public partial class Main : Node
 {
     public bool IsPaused;
     public UIManager UserInterface;
 
-    private Node _loadedScene;
+    private Level _loadedScene;
     private string _worldPrefix;
     private Queue<Enemy> _enemyTurns;
     private Timeout _enemyMove;
     private Timeout _playerMove;
     private Player _player;
+    private DungeonManager _dungeonManager;
 
+    protected DungeonManager DungeonManager => _dungeonManager ?? LoadDungeonManager();
     public Player CurrentPlayer
     {
         get
@@ -32,6 +34,7 @@ public class Main : Node
     /// </summary>
     public override void _Ready()
     {
+        GD.Print("Ready");
         base._Ready();
 
         // Read json files and prepopulate ItemFactory data
@@ -54,8 +57,9 @@ public class Main : Node
         IsPaused = true;
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
+        GD.Print("Process");
         if (Input.IsActionJustPressed("debug"))
         {
             UserInterface.Debug.ShowLevelSelect();
@@ -82,21 +86,21 @@ public class Main : Node
     /// <summary>Builds a Pickup, adds it to the current scene, and registers the events for the collider</summary>
     public void DropItem(Item drop, Vector2 position)
     {
-        var pickup = ItemFactory.BuildPickup(drop, position);
+        Pickup pickup = ItemFactory.BuildPickup(drop, position);
         pickup.AddToGroup(NodeGroups.Pickups);
         _loadedScene.GetNode("%Pickups").AddChild(pickup);
 
-        pickup.Connect(nameof(Pickup.ItemPickedUp), this, nameof(OnItemPickedUp));
+        pickup.ItemPickedUp += OnItemPickedUp;
     }
 
     public void PlayerDropItem(Item item)
     {
         Vector2[] nsew = {
             new Vector2(0,-8), // N
-            new Vector2(0,8),  // S
-            new Vector2(8,0),  // E
-            new Vector2(-8,0), // W
-        };
+			new Vector2(0,8),  // S
+			new Vector2(8,0),  // E
+			new Vector2(-8,0), // W
+		};
 
         var openPositions = nsew.Where(x => _player.MoveAndCollide(x, testOnly: true) == null).ToArray();
         if (openPositions.Any())
@@ -109,7 +113,7 @@ public class Main : Node
     /// <summary>
     /// Handles the player and enemy turn timers to give some delay to player and enemy movement.
     /// </summary>
-    private void HandleTimers(float delta)
+    private void HandleTimers(double delta)
     {
         if (_enemyTurns.Any())
         {
@@ -143,9 +147,9 @@ public class Main : Node
         {
             UnloadCurrentMap();
 
-            Node scene = ResourceLoader.Load<PackedScene>($"res://Maps/{_worldPrefix}{map}.tscn").Instance();
+            Level scene = ResourceLoader.Load<PackedScene>($"res://Maps/{_worldPrefix}{map}.tscn").Instantiate<Level>();
             _loadedScene = scene;
-            _loadedScene.Connect(nameof(Level.LevelLoaded), this, "OnLevelLoaded");
+            _loadedScene.LevelLoaded += OnLevelLoaded;
 
             GetNode("GameContainer/GameCam").CallDeferred("add_child", scene);
         }
@@ -179,18 +183,18 @@ public class Main : Node
         GetNode("/root/Main/GameContainer/GameCam").MoveChild(sender, 0);
 
         // Move the player to the spawn point
-        Position2D playerSpawn = sender.GetNode<Position2D>("PlayerSpawn");
+        Marker2D playerSpawn = sender.GetNode<Marker2D>("PlayerSpawn");
         CurrentPlayer.Position = playerSpawn.Position;
 
         // Listen to events for pickups and stairs and enemies
-        Godot.Collections.Array pickups = GetTree().GetNodesInGroup(NodeGroups.Pickups);
-        pickups.ConnectAll(nameof(Pickup.ItemPickedUp), this, nameof(OnItemPickedUp));
+        IEnumerable<Pickup> pickups = GetTree().GetNodesInGroup(NodeGroups.Pickups).Cast<Pickup>();
+        pickups.ForEach(x => x.ItemPickedUp += OnItemPickedUp);
 
-        Godot.Collections.Array stairs = GetTree().GetNodesInGroup(NodeGroups.Stairs);
-        stairs.ConnectAll(nameof(Stairs.StairsEntered), this, nameof(OnStairsEntered));
+        IEnumerable<Stairs> stairs = GetTree().GetNodesInGroup(NodeGroups.Stairs).Cast<Stairs>();
+        stairs.ForEach(x => x.StairsEntered += OnStairsEntered);
 
-        Godot.Collections.Array enemies = GetTree().GetNodesInGroup(NodeGroups.Enemies);
-        enemies.ConnectAll(nameof(Enemy.EnemyKilled), this, nameof(OnEnemyKilled));
+        IEnumerable<Enemy> enemies = GetTree().GetNodesInGroup(NodeGroups.Enemies).Cast<Enemy>();
+        enemies.ForEach(x => x.EnemyKilled += OnEnemyKilled);
     }
 
     private void LoadSettings()
@@ -198,17 +202,22 @@ public class Main : Node
         var settings = UserInterface.Settings.CurrentSettings;
 
         // Update video settings
-        OS.WindowMaximized = settings.Window == Settings.WindowType.Maximized;
-        OS.WindowFullscreen = settings.Window == Settings.WindowType.BorderlessWindowed;
+        DisplayServer.WindowSetMode(settings.Window switch
+        {
+            Settings.WindowType.Maximized => DisplayServer.WindowMode.Maximized,
+            Settings.WindowType.Windowed => DisplayServer.WindowMode.Windowed,
+            Settings.WindowType.BorderlessWindowed => DisplayServer.WindowMode.Fullscreen,
+            _ => DisplayServer.WindowMode.Windowed
+        });
 
-        Engine.TargetFps = settings.MaxFps;
+        Engine.MaxFps = settings.MaxFps;
 
         // Update Sound settings
         foreach (AudioStreamPlayer a in GetTree().GetNodesInGroup("background_noise"))
-            a.VolumeDb = GD.Linear2Db(settings.BackgroundVolume * settings.MasterVolume);
+            a.VolumeDb = Mathf.LinearToDb(settings.BackgroundVolume * settings.MasterVolume);
 
         foreach (AudioStreamPlayer a in GetTree().GetNodesInGroup("sound_effects"))
-            a.VolumeDb = GD.Linear2Db(settings.SoundEffectsVolume * settings.MasterVolume);
+            a.VolumeDb = Mathf.LinearToDb(settings.SoundEffectsVolume * settings.MasterVolume);
 
         // Start the background noise if it's not already running.
         // It is not running by default to prevent it from playing a loud sound on startup when the user has turned it down before
@@ -245,7 +254,7 @@ public class Main : Node
         _enemyTurns.Clear();
         _playerMove.Reset();
 
-        Godot.Collections.Array enemies = GetTree().GetNodesInGroup(NodeGroups.Enemies);
+        Godot.Collections.Array<Node> enemies = GetTree().GetNodesInGroup(NodeGroups.Enemies);
         foreach (Enemy e in enemies)
         {
             if (e.CanSeePlayer)
@@ -289,23 +298,38 @@ public class Main : Node
 
     private Player LoadPlayer()
     {
-        var output = GetNodeOrNull<Player>("%GameCam/Player");
+        _player = GetNodeOrNull<Player>("%GameCam/Player");
 
-        if (output == null)
+        if (_player == null)
         {
             // TODO: Load settings from file
 
-            Player player = (Player)ResourceLoader.Load<PackedScene>("res://Nodes/Player.tscn").Instance();
-            player.Name = "Player";
+            _player = ResourceLoader.Load<PackedScene>("res://Nodes/Player.tscn").Instantiate<Player>();
+            _player.Name = "Player";
 
-            GetNode("/root/Main/GameContainer/GameCam").AddChild(player, true);
+            GetNode("/root/Main/GameContainer/GameCam").AddChild(_player, true);
 
-            player.Connect(nameof(Player.PlayerMoved), this, nameof(OnPlayerMoved));
-            player.Connect(nameof(Player.PlayerDied), this, nameof(OnPlayerDied));
+            _player.PlayerMoved += OnPlayerMoved;
+            _player.PlayerDied += OnPlayerDied;
         }
 
         _player = GetNode<Player>("%GameCam/Player");
 
         return _player;
+    }
+
+    private DungeonManager LoadDungeonManager()
+    {
+        DungeonManager output = GetNodeOrNull<DungeonManager>("%GameCam/DungeonMaster");
+
+        if (output == null)
+        {
+            output = new DungeonManager();
+            output.Name = "DungeonManager";
+
+            GetNode("%GameCam").AddChild(output, true);
+        }
+
+        return output;
     }
 }

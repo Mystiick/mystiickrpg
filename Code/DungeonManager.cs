@@ -1,6 +1,6 @@
 using Godot;
 
-public class DungeonManager : Node2D
+public partial class DungeonManager : Node2D
 {
 
 }

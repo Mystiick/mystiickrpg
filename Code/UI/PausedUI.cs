@@ -1,10 +1,10 @@
 using Godot;
 using System;
 
-public class PausedUI : CanvasLayer
+public partial class PausedUI : CanvasLayer
 {
-    [Signal] public delegate void RestartButtonPressed();
-    [Signal] public delegate void SettingsPressed();
+    [Signal] public delegate void RestartButtonPressedEventHandler();
+    [Signal] public delegate void SettingsPressedEventHandler();
 
     public void UpdateDeathStats(Player p)
     {

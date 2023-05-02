@@ -1,22 +1,22 @@
 using Godot;
 using System.Linq;
 
-public class UIManager : Control
+public partial class UIManager : Control
 {
     public HUD HUD { get; private set; }
 
     public DebugUI Debug { get; private set; }
-    [Signal] public delegate void DebugLoadLevel(string level);
+    [Signal] public delegate void DebugLoadLevelEventHandler(string level);
 
     public MainMenu MainMenu { get; private set; }
-    [Signal] public delegate void MainMenuStartButtonPressed();
+    [Signal] public delegate void MainMenuStartButtonPressedEventHandler();
 
 
     public PausedUI Paused { get; private set; }
-    [Signal] public delegate void PausedRestartButtonPressed();
+    [Signal] public delegate void PausedRestartButtonPressedEventHandler();
 
     public SettingsUI Settings { get; private set; }
-    [Signal] public delegate void SettingsUpdated();
+    [Signal] public delegate void SettingsUpdatedEventHandler();
 
     public override void _Ready()
     {

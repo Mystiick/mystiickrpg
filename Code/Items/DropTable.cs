@@ -1,7 +1,7 @@
 using Godot;
 using System.Linq;
 
-public class DropTable
+public partial class DropTable
 {
     public string Name { get; set; }
     public Drop[] Drops { get; set; }

@@ -1,8 +1,8 @@
 using Godot;
 
-public class HUD : CanvasLayer
+public partial class HUD : CanvasLayer
 {
-    private TextureProgress _healthBar;
+    private TextureProgressBar _healthBar;
     private ItemButton[] _inventoryButtons;
 
     public override void _Ready()
@@ -10,7 +10,7 @@ public class HUD : CanvasLayer
         base._Ready();
 
         // Grab references to the Health Bar and Inventory buttons for ease of use later
-        _healthBar = GetNode<TextureProgress>("Base/HealthBar");
+        _healthBar = GetNode<TextureProgressBar>("Base/HealthBar");
 
         Player player = GetNode<Main>("/root/Main").CurrentPlayer;
         _inventoryButtons = new ItemButton[player.Inventory.Size];
@@ -18,8 +18,8 @@ public class HUD : CanvasLayer
         {
             _inventoryButtons[i] = GetNode<ItemButton>($"Base/InventoryAndPaperdoll/Inventory/{i}");
             _inventoryButtons[i].Inventory = player.Inventory;
-            _inventoryButtons[i].Connect(nameof(ItemButton.ItemUsed), this, nameof(OnInventoryItemUsed));
-            _inventoryButtons[i].Connect(nameof(ItemButton.ItemDropped), this, nameof(OnInventoryItemDropped));
+            _inventoryButtons[i].ItemUsed += OnInventoryItemUsed;
+            _inventoryButtons[i].ItemDropped += OnInventoryItemDropped;
         }
     }
 
@@ -57,13 +57,13 @@ public class HUD : CanvasLayer
             {
                 btn.Item = item;
                 btn.TextureNormal = item.Texture;
-                btn.HintTooltip = item.BuildTooltip();
+                btn.TooltipText = item.BuildTooltip();
             }
             else
             {
                 btn.Item = null;
                 btn.TextureNormal = null;
-                btn.HintTooltip = string.Empty;
+                btn.TooltipText = string.Empty;
             }
         }
 
@@ -97,13 +97,13 @@ public class HUD : CanvasLayer
         {
             btn.Item = item;
             btn.TextureNormal = item.Texture;
-            btn.HintTooltip = item.BuildTooltip();
+            btn.TooltipText = item.BuildTooltip();
         }
         else
         {
             btn.Item = null;
             btn.TextureNormal = null;
-            btn.HintTooltip = string.Empty;
+            btn.TooltipText = string.Empty;
         }
     }
 }

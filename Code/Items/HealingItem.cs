@@ -1,6 +1,6 @@
 using Godot;
 
-public class HealingItem : Item
+public partial class HealingItem : Item
 {
     public int HealingAmount;
 

@@ -1,10 +1,10 @@
 using Godot;
 using System;
 
-public class MainMenu : CanvasLayer
+public partial class MainMenu : CanvasLayer
 {
-    [Signal] public delegate void StartButtonPressed();
-    [Signal] public delegate void SettingsButtonPressed();
+    [Signal] public delegate void StartButtonPressedEventHandler();
+    [Signal] public delegate void SettingsButtonPressedEventHandler();
 
     public void OnStartPressed()
     {

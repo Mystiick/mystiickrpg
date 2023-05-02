@@ -1,15 +1,19 @@
 [remap]
 
-importer="ogg_vorbis"
-type="AudioStreamOGGVorbis"
-path="res://.import/impactPlate_medium_001.ogg-978189aeccec3c44f801e1b9193e0f61.oggstr"
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://x1wyifbfclid"
+path="res://.godot/imported/impactPlate_medium_001.ogg-978189aeccec3c44f801e1b9193e0f61.oggvorbisstr"
 
 [deps]
 
 source_file="res://Assets/Sounds/impactPlate_medium_001.ogg"
-dest_files=[ "res://.import/impactPlate_medium_001.ogg-978189aeccec3c44f801e1b9193e0f61.oggstr" ]
+dest_files=["res://.godot/imported/impactPlate_medium_001.ogg-978189aeccec3c44f801e1b9193e0f61.oggvorbisstr"]
 
 [params]
 
 loop=false
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

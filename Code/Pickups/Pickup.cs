@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public class Pickup : Area2D
+public partial class Pickup : Area2D
 {
-    [Signal] public delegate void ItemPickedUp(Pickup sender);
+    [Signal] public delegate void ItemPickedUpEventHandler(Pickup sender);
     [Export] public AudioStream[] PickupSounds;
     [Export] public string ItemName;
     [Export(PropertyHint.MultilineText)] public string Tooltip;
@@ -19,12 +19,12 @@ public class Pickup : Area2D
 
     public void ConnectBody()
     {
-        Connect("body_entered", this, nameof(OnPickupBodyEntered));
+        this.BodyEntered += OnPickupBodyEntered;
     }
 
-    public void OnPickupBodyEntered(PhysicsBody2D collision)
+    public void OnPickupBodyEntered(Node2D node)
     {
-        if (collision is Player p)
+        if (node is Player p)
         {
             HandlePickup(p);
         }
@@ -51,7 +51,7 @@ public class Pickup : Area2D
             }
             else
             {
-                Sprite s = GetNode<Sprite>("Sprite");
+                Sprite2D s = GetNode<Sprite2D>("Sprite2D");
                 player.Inventory.Add(ItemFactory.BuildItemByType(Type, s.Texture, $"{ItemName}\n{Tooltip}", this, player));
             }
 

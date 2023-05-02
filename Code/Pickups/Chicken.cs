@@ -1,6 +1,6 @@
 using Godot;
 
-public class Chicken : Pickup
+public partial class Chicken : Pickup
 {
     [Export] public int HealingAmount = 6;
 

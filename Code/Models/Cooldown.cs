@@ -1,7 +1,7 @@
-public class Timeout
+public partial class Timeout
 {
-    public float Duration { get; set; }
-    public float Remaining { get; private set; }
+    public double Duration { get; set; }
+    public double Remaining { get; private set; }
     public bool Elapsed { get; private set; }
 
     public Timeout(float duration)
@@ -11,7 +11,7 @@ public class Timeout
     }
 
     /// <summary>Called by Main() during the normal _Process loop to update the timers</summary>
-    public void Process(float delta)
+    public void Process(double delta)
     {
         if (Remaining >= 0)
             Remaining -= delta;

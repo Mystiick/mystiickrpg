@@ -1,10 +1,10 @@
 using Godot;
 using System.Linq;
 
-public class Player : Entity
+public partial class Player : Entity
 {
-    [Signal] public delegate void PlayerMoved();
-    [Signal] public delegate void PlayerDied();
+    [Signal] public delegate void PlayerMovedEventHandler();
+    [Signal] public delegate void PlayerDiedEventHandler();
     [Export] public int TileScale = 8;
     [Export] public AudioStream[] Footsteps;
     [Export] public AudioStream DeathSound;
@@ -21,7 +21,7 @@ public class Player : Entity
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         HandleInput();
     }
@@ -85,13 +85,13 @@ public class Player : Entity
             // Use elses here instead of checking each one individually to make sure only one direction is moved at a time
             // And 2 turns aren't taken by trying to move at an angle
             if (Input.IsActionPressed("move_up"))
-                direction.y--;
+                direction.Y--;
             else if (Input.IsActionPressed("move_down"))
-                direction.y++;
+                direction.Y++;
             else if (Input.IsActionPressed("move_left"))
-                direction.x--;
+                direction.X--;
             else if (Input.IsActionPressed("move_right"))
-                direction.x++;
+                direction.X++;
 
             direction *= TileScale;
 
@@ -113,8 +113,8 @@ public class Player : Entity
                         // Then we can place the entity back on their tile
                         var newPos = Position / (float)TileScale;
                         Position = new Vector2(
-                            Mathf.RoundToInt(newPos.x),
-                            Mathf.RoundToInt(newPos.y)
+                            Mathf.RoundToInt(newPos.X),
+                            Mathf.RoundToInt(newPos.Y)
                         ) * TileScale;
                     }
                     PlaySound(Footsteps.Random());
@@ -140,13 +140,13 @@ public class Player : Entity
 
     private void HandlePlayerCollision(KinematicCollision2D collision)
     {
-        if (collision.Collider is Enemy enemy)
+        if (collision.GetCollider() is Enemy enemy)
         {
             // We collided with an enemy, now we must fight
             Fight(enemy);
             FinishTurn();
         }
-        else if (collision.Collider is Door door)
+        else if (collision.GetCollider() is Door door)
         {
             if (door.State == Door.DoorState.Locked && this.Inventory.Any(x => x is Key))
             {

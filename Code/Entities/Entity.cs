@@ -1,7 +1,7 @@
 using Godot;
 using System.Linq;
 
-public class Entity : KinematicBody2D
+public partial class Entity : CharacterBody2D
 {
     public Inventory Inventory { get; } = new Inventory();
     public Equipment Equipment { get; } = new Equipment();

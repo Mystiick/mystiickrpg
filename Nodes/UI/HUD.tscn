@@ -2,27 +2,27 @@
 
 [ext_resource path="res://Nodes/UI/Theme.tres" type="Theme" id=1]
 [ext_resource path="res://Code/UI/HUD.cs" type="Script" id=2]
-[ext_resource path="res://Assets/inventory.png" type="Texture" id=3]
-[ext_resource path="res://Assets/empty_bar.png" type="Texture" id=5]
-[ext_resource path="res://Assets/white-bar.png" type="Texture" id=6]
+[ext_resource path="res://Assets/inventory.png" type="Texture2D" id=3]
+[ext_resource path="res://Assets/empty_bar.png" type="Texture2D" id=5]
+[ext_resource path="res://Assets/white-bar.png" type="Texture2D" id=6]
 [ext_resource path="res://Nodes/ItemButton.tscn" type="PackedScene" id=7]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 2 )
 
 [node name="Base" type="Control" parent="."]
-margin_top = 1.0
-margin_right = 64.0
-margin_bottom = 481.0
-rect_clip_content = true
+offset_top = 1.0
+offset_right = 64.0
+offset_bottom = 481.0
+clip_contents = true
 theme = ExtResource( 1 )
 
-[node name="HealthBar" type="TextureProgress" parent="Base"]
-margin_left = 41.0
-margin_top = 303.0
-margin_right = 55.0
-margin_bottom = 472.0
-rect_pivot_offset = Vector2( 8, 112 )
+[node name="HealthBar" type="TextureProgressBar" parent="Base"]
+offset_left = 41.0
+offset_top = 303.0
+offset_right = 55.0
+offset_bottom = 472.0
+pivot_offset = Vector2( 8, 112 )
 value = 50.0
 texture_under = ExtResource( 5 )
 texture_progress = ExtResource( 6 )
@@ -34,21 +34,21 @@ nine_patch_stretch = true
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -0.5
-margin_right = 0.5
+offset_left = -0.5
+offset_right = 0.5
 theme = ExtResource( 1 )
 text = "10/10"
 align = 1
 valign = 1
 autowrap = true
 
-[node name="ManaBar" type="TextureProgress" parent="Base"]
+[node name="ManaBar" type="TextureProgressBar" parent="Base"]
 visible = false
-margin_left = 8.0
-margin_top = 200.0
-margin_right = 24.0
-margin_bottom = 376.0
-rect_pivot_offset = Vector2( 8, 112 )
+offset_left = 8.0
+offset_top = 200.0
+offset_right = 24.0
+offset_bottom = 376.0
+pivot_offset = Vector2( 8, 112 )
 value = 50.0
 texture_under = ExtResource( 5 )
 texture_progress = ExtResource( 6 )
@@ -57,147 +57,147 @@ tint_progress = Color( 0.207843, 0.505882, 0.686275, 1 )
 nine_patch_stretch = true
 
 [node name="InventoryAndPaperdoll" type="TextureRect" parent="Base"]
-margin_top = 8.0
-margin_right = 64.0
-margin_bottom = 168.0
+offset_top = 8.0
+offset_right = 64.0
+offset_bottom = 168.0
 texture = ExtResource( 3 )
 
 [node name="Inventory" type="Control" parent="Base/InventoryAndPaperdoll"]
-margin_left = 9.0
-margin_top = 80.0
-margin_right = 55.0
-margin_bottom = 142.0
+offset_left = 9.0
+offset_top = 80.0
+offset_right = 55.0
+offset_bottom = 142.0
 
 [node name="0" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 1.0
-margin_top = 1.0
-margin_right = 13.0
-margin_bottom = 13.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 13.0
+offset_bottom = 13.0
 
 [node name="1" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 17.0
-margin_top = 1.0
-margin_right = 29.0
-margin_bottom = 13.0
+offset_left = 17.0
+offset_top = 1.0
+offset_right = 29.0
+offset_bottom = 13.0
 
 [node name="2" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 33.0
-margin_top = 1.0
-margin_right = 45.0
-margin_bottom = 13.0
+offset_left = 33.0
+offset_top = 1.0
+offset_right = 45.0
+offset_bottom = 13.0
 
 [node name="3" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 1.0
-margin_top = 17.0
-margin_right = 13.0
-margin_bottom = 29.0
+offset_left = 1.0
+offset_top = 17.0
+offset_right = 13.0
+offset_bottom = 29.0
 
 [node name="4" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 17.0
-margin_top = 17.0
-margin_right = 29.0
-margin_bottom = 29.0
+offset_left = 17.0
+offset_top = 17.0
+offset_right = 29.0
+offset_bottom = 29.0
 
 [node name="5" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 33.0
-margin_top = 17.0
-margin_right = 45.0
-margin_bottom = 29.0
+offset_left = 33.0
+offset_top = 17.0
+offset_right = 45.0
+offset_bottom = 29.0
 
 [node name="6" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 1.0
-margin_top = 33.0
-margin_right = 13.0
-margin_bottom = 45.0
+offset_left = 1.0
+offset_top = 33.0
+offset_right = 13.0
+offset_bottom = 45.0
 
 [node name="7" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 17.0
-margin_top = 33.0
-margin_right = 29.0
-margin_bottom = 45.0
+offset_left = 17.0
+offset_top = 33.0
+offset_right = 29.0
+offset_bottom = 45.0
 
 [node name="8" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 33.0
-margin_top = 33.0
-margin_right = 45.0
-margin_bottom = 45.0
+offset_left = 33.0
+offset_top = 33.0
+offset_right = 45.0
+offset_bottom = 45.0
 
 [node name="9" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 1.0
-margin_top = 49.0
-margin_right = 13.0
-margin_bottom = 61.0
+offset_left = 1.0
+offset_top = 49.0
+offset_right = 13.0
+offset_bottom = 61.0
 
 [node name="10" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 17.0
-margin_top = 49.0
-margin_right = 29.0
-margin_bottom = 61.0
+offset_left = 17.0
+offset_top = 49.0
+offset_right = 29.0
+offset_bottom = 61.0
 
 [node name="11" parent="Base/InventoryAndPaperdoll/Inventory" instance=ExtResource( 7 )]
-margin_left = 33.0
-margin_top = 49.0
-margin_right = 45.0
-margin_bottom = 61.0
+offset_left = 33.0
+offset_top = 49.0
+offset_right = 45.0
+offset_bottom = 61.0
 
 [node name="Paperdoll" type="Control" parent="Base/InventoryAndPaperdoll"]
-margin_left = 8.0
-margin_top = 7.0
-margin_right = 56.0
-margin_bottom = 71.0
+offset_left = 8.0
+offset_top = 7.0
+offset_right = 56.0
+offset_bottom = 71.0
 
 [node name="Head" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
-margin_left = 18.0
-margin_top = 2.0
-margin_right = 30.0
-margin_bottom = 14.0
+offset_left = 18.0
+offset_top = 2.0
+offset_right = 30.0
+offset_bottom = 14.0
 focus_mode = 2
 
 [node name="Chest" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
-margin_left = 18.0
-margin_top = 18.0
-margin_right = 30.0
-margin_bottom = 30.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 30.0
+offset_bottom = 30.0
 focus_mode = 2
 
 [node name="Legs" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
-margin_left = 18.0
-margin_top = 34.0
-margin_right = 30.0
-margin_bottom = 46.0
+offset_left = 18.0
+offset_top = 34.0
+offset_right = 30.0
+offset_bottom = 46.0
 focus_mode = 2
 
 [node name="Boots" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
-margin_left = 18.0
-margin_top = 50.0
-margin_right = 30.0
-margin_bottom = 62.0
+offset_left = 18.0
+offset_top = 50.0
+offset_right = 30.0
+offset_bottom = 62.0
 focus_mode = 2
 
 [node name="Shoulders" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
-margin_left = 2.0
-margin_top = 18.0
-margin_right = 14.0
-margin_bottom = 30.0
+offset_left = 2.0
+offset_top = 18.0
+offset_right = 14.0
+offset_bottom = 30.0
 focus_mode = 2
 
 [node name="Amulet" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
-margin_left = 34.0
-margin_top = 18.0
-margin_right = 46.0
-margin_bottom = 30.0
+offset_left = 34.0
+offset_top = 18.0
+offset_right = 46.0
+offset_bottom = 30.0
 focus_mode = 2
 
 [node name="LeftHand" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
-margin_left = 2.0
-margin_top = 34.0
-margin_right = 14.0
-margin_bottom = 46.0
+offset_left = 2.0
+offset_top = 34.0
+offset_right = 14.0
+offset_bottom = 46.0
 focus_mode = 2
 
 [node name="RightHand" parent="Base/InventoryAndPaperdoll/Paperdoll" instance=ExtResource( 7 )]
-margin_left = 34.0
-margin_top = 34.0
-margin_right = 46.0
-margin_bottom = 46.0
+offset_left = 34.0
+offset_top = 34.0
+offset_right = 46.0
+offset_bottom = 46.0
 focus_mode = 2
